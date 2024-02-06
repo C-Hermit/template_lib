@@ -1,6 +1,7 @@
 #ifndef _STL_LIB_INL_
 #define _STL_LIB_INL_
 
+#include<math.h>
 #include<iostream>
 #include<iterator>
 #include<algorithm>
@@ -996,11 +997,41 @@ template<class K,class E>
 skiplist_dictionary<K,E>::skiplist_dictionary(K the_maxkey,int max_keypairs,float probability)
 {
     cutoff=probability*RAND_MAX;
-    max_level;
+    max_level=(int)ceil(logf((float)max_keypairs)/logf(1/probability))-1;
     levels=0;
     dirctionary_length=0;
     max_key=the_maxkey;
 
+    std::pair<K,E> tail_pair;
+    tail_pair.first=max_key;
+    head_node=new skip_node<K,E>(tail_pair,max_level+1);
+    tail_node=new skip_node<K,E>(tail_pair,0);
+    last=new skip_node<K,E> *[max_level+1];
+
+    for (int i = 0; i <=max_level; i++)
+        head_node->next[i]=tail_node;
+};
+template<class K,class E>
+skiplist_dictionary<K,E>::~skiplist_dictionary()
+{
+    while (head_node!=tail_node)
+    {
+        skip_node<K,E> *temp_node=head_node->next[0];
+        delete head_node;
+        head_node=temp_node;
+    }
+
+    delete tail_node;
+
+    delete[] last;
+};
+template<class K,class E>
+bool skiplist_dictionary<K,E>::empty()const{return dirctionary_length==0;};
+template<class K,class E>
+int skiplist_dictionary<K,E>::length()const{return dirctionary_length;};
+template<class K,class E>
+std::pair<const K,E> *skiplist_dictionary<K,E>::find(const K &the_key)const
+{
     
 };
 #endif
