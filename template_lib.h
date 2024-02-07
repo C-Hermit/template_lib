@@ -281,10 +281,11 @@ class chain_dictionary:public dictionary<K,E>
 template<class K,class E>
 class skip_node
 {
-    std::pair<const K,const E> *element;
-    skip_node<K,E> **next;
-    skip_node(const std::pair<const K,E> &the_element,int size)
-             :element(the_element){next=new skip_node<K,E> *[size];}
+    public:
+        std::pair<const K,E> element;
+        skip_node<K,E> **next;
+        skip_node(const std::pair<const K,E> &the_element,int size)
+                :element(the_element){next=new skip_node<K,E> *[size];}
 };
 template<class K,class E>
 class skiplist_dictionary:public dictionary<K,E>
@@ -297,12 +298,16 @@ class skiplist_dictionary:public dictionary<K,E>
         std::pair<const K,E> *find(const K &the_key)const;
         void insert(const std::pair<const K,E> &the_keypair);
         void erase(const K &the_key);
+        void output(std::ostream &out)const;
     protected:
         float cutoff;//the probability of grading
+        int level()const;
         int levels;//maximun non-empty chainlist
         int max_level;
         int dirctionary_length;//the number of elements in dictionary
         K max_key;//the element in tail_node
+        skip_node<K,E> *search(const K &the_key)const;
+
         skip_node<K,E> *head_node;
         skip_node<K,E> *tail_node;
         skip_node<K,E> **last;//an array of final nodes for each level

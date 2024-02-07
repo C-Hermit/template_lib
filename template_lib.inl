@@ -992,7 +992,7 @@ void chain_dictionary<K,E>::output(std::ostream &out)const
 }
 template<class K,class E>
 std::ostream &operator<<(std::ostream &out,const chain_dictionary<K,E> &x){x.output(out);return out;};
-/* -------------------------------- skip_node ------------------------------- */
+/* -------------------------------- skiplist_dictionary ------------------------------- */
 template<class K,class E>
 skiplist_dictionary<K,E>::skiplist_dictionary(K the_maxkey,int max_keypairs,float probability)
 {
@@ -1032,6 +1032,94 @@ int skiplist_dictionary<K,E>::length()const{return dirctionary_length;};
 template<class K,class E>
 std::pair<const K,E> *skiplist_dictionary<K,E>::find(const K &the_key)const
 {
+    if (the_key>max_key)
+        return NULL;
+    skip_node<K,E> *temp_node=head_node;
+    for (int i = levels; i >0 ; i--)
+    {
+        while (temp_node->next[i]->element.first<the_key)
+        {
+            temp_node=temp_node->next[i];
+        }
+    }
+    if (temp_node->next[0]->element.first==the_key)
+    {
+        return &temp_node->next[0]->element;
+    }
+    return NULL;  
+};
+template<class K,class E>
+void skiplist_dictionary<K,E>::insert(const std::pair<const K,E> &the_keypair)
+{
+    if (the_keypair.first>max_key)
+        throw std::runtime_error("the key is invailed");
+    skip_node<K,E> *temp_node=search(the_keypair.first);
+    if (temp_node->element.first==the_keypair.first)
+    {
+        temp_node->element.second=the_keypair.second;
+        return;
+    }
+    int the_level=level();
+    if (the_level>levels)
+    {
+        the_level=++levels;
+        last[the_level]=head_node;
+    }
+    skip_node<K,E> *insert_node=new skip_node<K,E>(the_keypair,the_level+1);
+    for (int i = 0; i <= the_level; i++)
+    {
+        insert_node->next[i]=last[i]->next[i];
+        last[i]->next[i]=insert_node;
+    }
+    dirctionary_length++;
+    return;
+};
+template<class K,class E>
+void skiplist_dictionary<K,E>::erase(const K &the_key)
+{
+    if (the_key>=max_key)
+        throw std::runtime_error("the key is invailed");
+    skip_node<K,E> *temp_node=search(the_key);
+    if (temp_node->element.first!=the_key)
+        return;
+    for (int i = 0; i <= levels &&last[i]->next[i]==temp_node; i++)
+        last[i]->next[i]=temp_node->next[i];
+
+    while (levels > 0 &&head_node->next[levels]==tail_node)
+        levels--;
+
+    delete temp_node;
+    dirctionary_length--;
+};
+template<class K,class E>
+skip_node<K,E> *skiplist_dictionary<K,E>::search(const K &the_key)const
+{
+    skip_node<K,E> *temp_node=head_node;
+    for (int i = levels; i >=0; i--)
+    {
+        while (temp_node->next[i]->element.first<the_key)
+            temp_node=temp_node->next[i];
+        last[i]=temp_node;
+    }
+    return temp_node->next[0];
+};
+template<class K,class E>
+int skiplist_dictionary<K,E>::level()const
+{
+    int lev=0;
+    while (rand()<=cutoff)
+        lev++;
+    return (lev<=max_level)?lev:max_level;
     
 };
+template<class K,class E>
+void skiplist_dictionary<K,E>::output(std::ostream &out)const
+{
+    for ( skip_node<K,E> *temp_node = head_node->next[0];temp_node!=tail_node; temp_node=temp_node->next[0])
+    {
+        out<<temp_node->element.first<<""<<temp_node->element.second<<"";
+    }
+};
+template<class K,class E>
+std::ostream &operator<<(std::ostream &out,const skiplist_dictionary<K,E> &x){x.output(out);return out;};
 #endif
