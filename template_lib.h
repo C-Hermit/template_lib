@@ -270,7 +270,7 @@ class chain_dictionary:public dictionary<K,E>
         ~chain_dictionary();
         bool empty()const;
         int length()const;
-        std::pair<const K,E> *find(const K &)const;
+        std::pair<const K,E> *find(const K &the_key)const;
         void insert(const std::pair<const K,E> &the_keypair);
         void erase(const K &the_key);
         void output(std::ostream &out)const;
@@ -312,6 +312,33 @@ class skiplist_dictionary:public dictionary<K,E>
         skip_node<K,E> *tail_node;
         skip_node<K,E> **last;//an array of final nodes for each level
 
+};
+template<class K>
+class hash;
+template<> 
+class hash<int>
+{
+
+};
+template<class K,class E>
+class hashtable_dictionary:public dictionary<K,E>
+{
+    public:
+        hashtable_dictionary(int the_divisor=11);
+        ~hashtable_dictionary();
+        
+        bool empty()const;
+        int length()const;
+        std::pair<const K,E> *find(const K&the_key)const;
+        void insert(const std::pair<const K,E> &the_keypair);
+        void erase(const K &the_key);
+        void output(std::ostream &out)const;
+    protected:
+        int search(const K &the_key);
+        hash<K> hash;
+        std::pair<const K,E> **table;
+        int dictionary_length;
+        int divisor;
 };
 #include"template_lib.inl"
 #endif
