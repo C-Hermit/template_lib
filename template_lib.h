@@ -313,12 +313,33 @@ class skiplist_dictionary:public dictionary<K,E>
         skip_node<K,E> **last;//an array of final nodes for each level
 
 };
-template<class K>
-class hash;
+template<class K>class hash;
+template<> 
+class hash<std::string>
+{
+    public:
+        size_t operator()(const std::string the_key)const
+        {
+            unsigned long hashvalue=0;
+            int length =(int)the_key.length();
+            for (int  i = 0; i < length; i++)
+            {
+                hashvalue=5*hashvalue+the_key.at(i);
+            }
+            return size_t(hashvalue);
+        }
+};
 template<> 
 class hash<int>
 {
-
+    public:
+        size_t operator()(const int the_key)const{return size_t(the_key);};
+};
+template<> 
+class hash<float>
+{
+    public:
+        size_t operator()(const long the_key)const{return size_t(the_key);};
 };
 template<class K,class E>
 class hashtable_dictionary:public dictionary<K,E>
@@ -334,7 +355,7 @@ class hashtable_dictionary:public dictionary<K,E>
         void erase(const K &the_key);
         void output(std::ostream &out)const;
     protected:
-        int search(const K &the_key);
+        int search(const K &the_key)const;
         hash<K> hash;
         std::pair<const K,E> **table;
         int dictionary_length;

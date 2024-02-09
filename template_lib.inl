@@ -1122,4 +1122,121 @@ void skiplist_dictionary<K,E>::output(std::ostream &out)const
 };
 template<class K,class E>
 std::ostream &operator<<(std::ostream &out,const skiplist_dictionary<K,E> &x){x.output(out);return out;};
+template<class K,class E>
+hashtable_dictionary<K,E>::hashtable_dictionary(int the_divisor)
+{
+    divisor=the_divisor;
+    dictionary_length=0;
+    table=new std::pair<const K,E> *[divisor];
+    for (int  i = 0; i < divisor; i++)
+        table[i]=NULL;
+};
+template<class K,class E>
+hashtable_dictionary<K,E>::~hashtable_dictionary(){delete[] table;};
+template<class K,class E>
+bool hashtable_dictionary<K,E>::empty()const{return dictionary_length==0;};
+template<class K,class E>
+int hashtable_dictionary<K,E>::length()const{return dictionary_length;};
+template<class K,class E>
+int hashtable_dictionary<K,E>::search(const K &the_key)const
+{
+    int i=(int)hash(the_key)%divisor;
+    int j=i;
+    do
+    {
+        if (table[j]==NULL||table[j]->first==the_key)
+            return j;
+        j=(j+1)%divisor;
+    }while(j!=i);
+    return j;
+};
+template<class K,class E>
+std::pair<const K,E> *hashtable_dictionary<K,E>::find(const K &the_key)const
+{
+    int b=search(the_key);
+    if (table[b]==NULL||table[b]->first!=the_key)
+        return NULL;
+    return table[b];   
+};
+template<class K,class E>
+void hashtable_dictionary<K,E>::insert(const std::pair<const K,E> &the_keypair)
+{
+    int b=search(the_keypair.first);
+    if (table[b]==NULL)
+    {
+        table[b]=new std::pair<const K,E>(the_keypair);
+        dictionary_length++;
+    }
+    else
+    {
+        if (table[b]->first==the_keypair.first)
+        {
+            table[b]->second=the_keypair.second;
+        }
+        else
+        {
+            throw std::runtime_error("hashtable is full");
+        }
+    }
+};
+template<class K,class E>
+void hashtable_dictionary<K,E>::erase(const K &the_key)
+{
+    int b=search(the_key);
+    if (table[b]==NULL)
+    {
+        return;
+    }
+    else
+    {
+        if (table[b]->first==the_key)
+        {
+            int i=(b+1)%divisor;
+            if (dictionary_length==1)
+            {
+                table[b]=NULL;
+            }
+            else
+            {
+                do
+                {
+                    if (table[i]!=NULL)
+                    {
+                        int j=(int)hash(table[i]->first)%divisor;
+                        if (j==b)
+                        {
+                            table[b]=table[i];  
+                            table[i]=NULL;
+                        }
+                    }
+                    i=(i+1)%divisor;
+                } while (i!=b);
+            }
+        }
+        else
+        {
+            return;
+        }
+        
+    }
+    dictionary_length--;
+};
+template<class K,class E>
+void hashtable_dictionary<K,E>::output(std::ostream &out)const
+{
+    for (int i = 0; i < divisor; i++)
+    {
+        if (table[i]==NULL)
+        {
+            out<<"NULL"<<std::endl;
+        }
+        else
+        {
+            out<<table[i]->first<<""<<table[i]->second<<std::endl;
+        }
+    }
+};
+template<class K,class E>
+std::ostream &operator<<(std::ostream &out,const hashtable_dictionary<K,E> &x){x.output(out);return out;}; 
+
 #endif
