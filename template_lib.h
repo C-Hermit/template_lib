@@ -361,5 +361,24 @@ class hashtable_dictionary:public dictionary<K,E>
         int dictionary_length;
         int divisor;
 };
+template<class K,class E>
+class hashchains_dictionary:public dictionary<K,E>
+{
+    public:
+        hashchains_dictionary(int the_divisor);
+        ~hashchains_dictionary();
+
+        bool empty()const;
+        int empty()const;
+        std::pair<const K,E> *find(const K &the_key)const;
+        void insert(std::pair<const K,E> &the_keypair);
+        void erase(const K  &the_key);
+        void output(std::ostream &out,const hashchains_dictionary &x);
+    protected:
+        chain_dictionary<K,E> *table;
+        hash<K> hash;
+        int dictionary_length;
+        int divisor;
+};
 #include"template_lib.inl"
 #endif
