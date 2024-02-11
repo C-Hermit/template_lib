@@ -969,15 +969,19 @@ void chain_dictionary<K,E>::erase(const K &the_key)
     chain_node<std::pair<const K,E>> *temp_node=head_node,
                                      *previous_node=NULL;
     while (temp_node!=NULL)
-    {
-
+    { 
         if (temp_node->element.first==the_key)
         {
-            previous_node->next=temp_node->next;
+            if (previous_node==NULL)
+                head_node=temp_node->next;
+            else previous_node->next=temp_node->next;
             delete temp_node;
         }
-        previous_node=temp_node;
-        temp_node=temp_node->next;
+        else
+        {
+            previous_node=temp_node;
+            temp_node=temp_node->next;
+        }
     }
 };
 template<class K,class E>
@@ -1238,5 +1242,48 @@ void hashtable_dictionary<K,E>::output(std::ostream &out)const
 };
 template<class K,class E>
 std::ostream &operator<<(std::ostream &out,const hashtable_dictionary<K,E> &x){x.output(out);return out;}; 
-
+template<class K,class E>
+hashchains_dictionary<K,E>::hashchains_dictionary(int the_divisor)
+{
+    divisor=the_divisor;
+    dictionary_length=0;
+    table=new chain_dictionary<K,E>[divisor];
+}
+template<class K,class E>
+hashchains_dictionary<K,E>::~hashchains_dictionary(){delete[] table;};
+template<class K,class E>
+bool hashchains_dictionary<K,E>::empty()const{return dictionary_length==0;};
+template<class K,class E>
+int hashchains_dictionary<K,E>::length()const{return dictionary_length;};
+template<class K,class E>
+std::pair<const K,E> *hashchains_dictionary<K,E>::find(const K &the_key)const{return table[hash(the_key)%divisor].find(the_key);};
+template<class K,class E>
+void hashchains_dictionary<K,E>::insert(const std::pair<const K,E> &the_keypair)
+{
+    int tin_length=table[hash(the_keypair.first)%divisor].length();
+    table[hash(the_keypair.first)%divisor].insert(the_keypair);
+    if (table[hash(the_keypair.first)%divisor].length()>tin_length)
+        dictionary_length++;
+}
+template<class K,class E>
+void hashchains_dictionary<K,E>::erase(const K &the_key)
+{
+    int tin_length=table[hash(the_key)%divisor].length();
+    table[hash(the_key)%divisor].erase(the_key);
+    if (table[hash(the_key)%divisor].length()<tin_length)
+        dictionary_length--;    
+};
+template<class K,class E>
+void hashchains_dictionary<K,E>::output(std::ostream &out)const
+{
+    for (int  i = 0; i < divisor; i++)
+    {
+        if (table[i].length()==0)
+            out<<"NULL"<<std::endl;
+        else
+            out<<table[i]<<std::endl;
+    }
+};
+template<class K,class E>
+std::ostream &operator<<(std::ostream &out,const hashchains_dictionary<K,E> &x){x.output(out);return out;};
 #endif

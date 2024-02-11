@@ -2,7 +2,7 @@
 #include"template_lib.h"
 int main(void)
 {
-    hashtable_dictionary<int,int> a(11);
+    hashchains_dictionary<int,int> a(11);
     std::pair<int,int> b;
     b.first=1;
     b.second=1;

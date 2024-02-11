@@ -369,11 +369,11 @@ class hashchains_dictionary:public dictionary<K,E>
         ~hashchains_dictionary();
 
         bool empty()const;
-        int empty()const;
+        int length()const;
         std::pair<const K,E> *find(const K &the_key)const;
-        void insert(std::pair<const K,E> &the_keypair);
+        void insert(const std::pair<const K,E> &the_keypair);
         void erase(const K  &the_key);
-        void output(std::ostream &out,const hashchains_dictionary &x);
+        void output(std::ostream &out)const;
     protected:
         chain_dictionary<K,E> *table;
         hash<K> hash;
