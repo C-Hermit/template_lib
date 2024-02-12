@@ -968,20 +968,18 @@ void chain_dictionary<K,E>::erase(const K &the_key)
 {
     chain_node<std::pair<const K,E>> *temp_node=head_node,
                                      *previous_node=NULL;
-    while (temp_node!=NULL)
+    while (temp_node!=NULL&&temp_node->element.first<the_key)
     { 
-        if (temp_node->element.first==the_key)
-        {
-            if (previous_node==NULL)
+        previous_node=temp_node;
+        temp_node=temp_node->next;
+    }
+    if (temp_node!=NULL&&temp_node->element.first==the_key)
+    {
+        if (previous_node==NULL)
                 head_node=temp_node->next;
-            else previous_node->next=temp_node->next;
-            delete temp_node;
-        }
-        else
-        {
-            previous_node=temp_node;
-            temp_node=temp_node->next;
-        }
+        else previous_node->next=temp_node->next;
+        delete temp_node;
+        dirtionary_length--;
     }
 };
 template<class K,class E>
