@@ -380,5 +380,18 @@ class hashchains_dictionary:public dictionary<K,E>
         int dictionary_length;
         int divisor;
 };
+/* ------------------------------- binarytree ------------------------------- */
+template<class T>
+class binarytree
+{
+    public:
+        virtual ~binarytree(){};
+        virtual bool empty()const=0;
+        virtual int length()const=0;
+        virtual void pre_order(void(*)(T *))const=0;
+        virtual void in_order(void (*)(T *))const=0;
+        virtual void post_order(void (*)(T *))const=0;
+        virtual void level_order(void (*)(T *))const=0;
+};
 #include"template_lib.inl"
 #endif
