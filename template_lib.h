@@ -393,5 +393,21 @@ class binarytree
         virtual void post_order(void (*)(T *))const=0;
         virtual void level_order(void (*)(T *))const=0;
 };
+template<class T>
+class array_binarytree
+{
+    public:
+        array_dictionary();
+        ~array_binarytree();
+        bool empty()const;
+        int length()const;
+        void pre_order(void (*)(T *))const;
+        void in_order(void (*)(T *))const;
+        void post_order(void (*)(T *))const;
+        void level_order(void (*)(T*))const;
+    protected:
+        T *element;
+        int binarytree_length;
+}
 #include"template_lib.inl"
 #endif
