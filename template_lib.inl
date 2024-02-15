@@ -1284,4 +1284,41 @@ void hashchains_dictionary<K,E>::output(std::ostream &out)const
 };
 template<class K,class E>
 std::ostream &operator<<(std::ostream &out,const hashchains_dictionary<K,E> &x){x.output(out);return out;};
+/* ---------------------------- array_binarytree ---------------------------- */
+template<class T>
+array_binarytree<T>::array_binarytree(int initial_capacity)
+{
+    if (initial_capacity<1)
+        throw std::runtime_error("the initial_capacity is invalid");
+    
+    binarytree_length=0;
+    binarytree_size=initial_capacity;
+    element=new T[initial_capacity];
+};
+template<class T>
+array_binarytree<T>::~array_binarytree(){delete[] element;};
+template<class T>
+bool array_binarytree<T>::empty()const{return binarytree_length==0;};
+template<class T>
+int array_binarytree<T>::length()const{return binarytree_length;};
+template<class T>
+void array_binarytree<T>::pre_order(void (*the_visit)(T *))
+{
+    visit=the_visit;
+    pre_order(element,1);
+};
+template<class T>
+void array_binarytree<T>::in_order(void (*the_visit)(T *))
+{
+    visit=the_visit;
+    in_order(element,1);
+};
+template<class T>
+void array_binarytree<T>::post_order(void (*the_visit)(T *))
+{
+    visit=the_visit;
+    post_order(element,1);
+};
+
+
 #endif

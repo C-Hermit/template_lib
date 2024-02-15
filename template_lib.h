@@ -388,26 +388,73 @@ class binarytree
         virtual ~binarytree(){};
         virtual bool empty()const=0;
         virtual int length()const=0;
-        virtual void pre_order(void(*)(T *))const=0;
-        virtual void in_order(void (*)(T *))const=0;
-        virtual void post_order(void (*)(T *))const=0;
-        virtual void level_order(void (*)(T *))const=0;
+        virtual void pre_order(void(*)(T *))=0;
+        virtual void in_order(void (*)(T *))=0;
+        virtual void post_order(void (*)(T *))=0;
+        virtual void level_order(void (*)(T *))=0;
 };
 template<class T>
 class array_binarytree
 {
     public:
-        array_dictionary();
+        array_binarytree(int initial_capacity=10);
         ~array_binarytree();
         bool empty()const;
         int length()const;
-        void pre_order(void (*)(T *))const;
-        void in_order(void (*)(T *))const;
-        void post_order(void (*)(T *))const;
-        void level_order(void (*)(T*))const;
+        void pre_order(void (*the_visit)(T *));
+        void in_order(void (*the_visit)(T *));
+        void post_order(void (*the_visit)(T *));
+        void level_order(void (*the_visit)(T *));
     protected:
         T *element;
         int binarytree_length;
-}
+        int binarytree_size;
+        static void (*visit)(T *);
+        static void pre_order(T *t,int i);
+        static void in_order(T *t,int i);
+        static void post_order(T *t,int i);
+};
+template<class T>
+class binarytree_node
+{
+    public:
+        T *element;
+        binarytree_node *left_child;
+        binarytree_node *right_child;
+        binarytree_node(){left_child=right_child=NULL;}
+        binarytree_node(const T &the_element):element(the_element)
+        {
+            left_child=right_child=NULL;
+        }
+        binarytree_node(const T &the_element,binarytree_node<T> *the_leftchild,binarytree_node<T> *the_rightchild)
+        :element(the_element)
+        {
+            left_child=the_leftchild;
+            right_child=the_rightchild;
+        }
+};
+template<class T>
+class chain_binarytree:public binarytree<T>
+{
+    public:
+        chain_binarytree();
+        ~chain_binarytree();
+        bool empty()const;
+        int length()const;
+        void pre_order(void(*the_visit)(binarytree_node<T> *));
+        void in_order(void (*the_visit)(binarytree_node<T> *));
+        void post_order(void (*the_visit)(binarytree_node<T> *));
+        void level_order(void (*the_visit)(binarytree_node<T> *));
+    protected:
+        binarytree_node<T> *root;
+        int binarytree_length;
+        int binarytree_size;
+        static void (*visit)(binarytree_node<T> *);
+        static void pre_order(binarytree_node<T> *t);
+        static void in_order(binarytree_node<T> *t);
+        static void post_order(binarytree_node<T> *t);
+
+};
+
 #include"template_lib.inl"
 #endif
