@@ -394,7 +394,7 @@ class binarytree
         virtual void level_order(void (*)(T *))=0;
 };
 template<class T>
-class array_binarytree
+class array_binarytree:public binarytree<T>
 {
     public:
         array_binarytree(int initial_capacity=10);

@@ -1319,6 +1319,51 @@ void array_binarytree<T>::post_order(void (*the_visit)(T *))
     visit=the_visit;
     post_order(element,1);
 };
-
-
+template<class T>
+void array_binarytree<T>::pre_order(T *the_element,int i)
+{
+    if (i<binarytree_size)
+    {
+        array_binarytree<T>::visit(the_element+i);
+        if (2i<binarytree_size)
+        {
+            pre_order(the_element,2i);
+        }
+        if (2i+1<binarytree_size)
+        {
+            pre_order(the_element,2i+1);
+        }
+    }
+};
+template<class T>
+void array_binarytree<T>::in_order(T *the_element,int i)
+{
+    if (i<binarytree_size)
+    {
+        if (2i<binarytree_size)
+        {
+            in_order(the_element,2i);
+        }
+        array_binarytree(the_element,2i);
+        if (2i+1<binarytree_size)
+        {
+            in_order(the_element,2i+1);
+        }
+    }
+}
+template<class T>
+void array_binarytree<T>::post_order(T *the_element,int i)
+{
+    if (i<binarytree_size)
+    {
+        if (2i<binarytree_size)
+        {
+            post_order(the_element,2i);
+        }
+        if (2i+1<binarytree_size)
+        {
+            post_order(the_element,2i+1);
+        }
+    }
+};
 #endif
