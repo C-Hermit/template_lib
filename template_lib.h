@@ -393,6 +393,7 @@ class binarytree
         virtual void post_order(void (*)(T *))=0;
         virtual void level_order(void (*)(T *))=0;
 };
+#if 0
 template<class T>
 class array_binarytree:public binarytree<T>
 {
@@ -405,6 +406,10 @@ class array_binarytree:public binarytree<T>
         void in_order(void (*the_visit)(T *));
         void post_order(void (*the_visit)(T *));
         void level_order(void (*the_visit)(T *));
+        void pre_order_output();
+        void in_order_output();
+        void post_order_output();
+        void level_order_output();
     protected:
         T *element;
         int binarytree_length;
@@ -413,7 +418,9 @@ class array_binarytree:public binarytree<T>
         static void pre_order(T *t,int i);
         static void in_order(T *t,int i);
         static void post_order(T *t,int i);
+        static void output(T *);
 };
+#endif
 template<class T>
 class binarytree_node
 {

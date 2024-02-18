@@ -1285,6 +1285,7 @@ void hashchains_dictionary<K,E>::output(std::ostream &out)const
 template<class K,class E>
 std::ostream &operator<<(std::ostream &out,const hashchains_dictionary<K,E> &x){x.output(out);return out;};
 /* ---------------------------- array_binarytree ---------------------------- */
+#if 0
 template<class T>
 array_binarytree<T>::array_binarytree(int initial_capacity)
 {
@@ -1325,13 +1326,13 @@ void array_binarytree<T>::pre_order(T *the_element,int i)
     if (i<binarytree_size)
     {
         array_binarytree<T>::visit(the_element+i);
-        if (2i<binarytree_size)
+        if (2*i<binarytree_size)
         {
-            pre_order(the_element,2i);
+            pre_order(the_element,2*i);
         }
-        if (2i+1<binarytree_size)
+        if (2*i+1<binarytree_size)
         {
-            pre_order(the_element,2i+1);
+            pre_order(the_element,2*i+1);
         }
     }
 };
@@ -1340,14 +1341,13 @@ void array_binarytree<T>::in_order(T *the_element,int i)
 {
     if (i<binarytree_size)
     {
-        if (2i<binarytree_size)
+        if (2*i<binarytree_size)
         {
-            in_order(the_element,2i);
+            in_order(the_element,2*i);
         }
-        array_binarytree(the_element,2i);
-        if (2i+1<binarytree_size)
+        if (2*i+1<binarytree_size)
         {
-            in_order(the_element,2i+1);
+            in_order(the_element,2*i+1);
         }
     }
 }
@@ -1356,14 +1356,44 @@ void array_binarytree<T>::post_order(T *the_element,int i)
 {
     if (i<binarytree_size)
     {
-        if (2i<binarytree_size)
+        if (2*i<binarytree_size)
         {
-            post_order(the_element,2i);
+            post_order(the_element,2*i);
         }
-        if (2i+1<binarytree_size)
+        if (2*i+1<binarytree_size)
         {
-            post_order(the_element,2i+1);
+            post_order(the_element,2*i+1);
         }
     }
 };
+template<class T>
+void array_binarytree<T>::level_order(void (*the_visit)(T *))
+{
+    array_queue<T*> q;
+    T *t=element;
+    for (int i = 1; i < binarytree_size; i++)
+    {
+        the_visit(t+i);
+        if (2*i<binarytree_size)
+            q.push(t+2*i);
+        if (2*i+1<binarytree_size)
+            q.push(t+2*i+1);
+        if (t==q.front())
+        {
+            throw std::runtime_error("the_queue is empty");
+        }
+        q.pop();
+    }    
+}
+template<class T>
+void array_binarytree<T>::pre_order_output(){pre_order(output);std::cout<<std::endl;};
+template<class T>
+void array_binarytree<T>::in_order_output(){in_order(output);std::cout<<std::endl;};
+template<class T>
+void array_binarytree<T>::post_order_output(){post_order(output);std::cout<<std::endl;};
+template<class T>
+void array_binarytree<T>::level_order_output(){level_order(output);std::cout<<std::endl;};
+template<class T>
+void array_binarytree<T>::output(T *t){std::cout<<*t<<' ';};
+#endif
 #endif
