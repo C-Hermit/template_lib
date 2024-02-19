@@ -448,19 +448,30 @@ class chain_binarytree:public binarytree<T>
         ~chain_binarytree();
         bool empty()const;
         int length()const;
+        T *root_element()const;
+        void make_tree(const T &element,binarytree_node<T>&,binarytree_node<T>&);
         void pre_order(void(*the_visit)(binarytree_node<T> *));
         void in_order(void (*the_visit)(binarytree_node<T> *));
         void post_order(void (*the_visit)(binarytree_node<T> *));
         void level_order(void (*the_visit)(binarytree_node<T> *));
+        void pre_order_output();
+        void in_order_output();
+        void post_order_output();
+        void level_order_output();
+        void erase();
     protected:
         binarytree_node<T> *root;
-        int binarytree_length;
-        int binarytree_size;
+        int binarytree_length;//the numbers of elements in binarytree
         static void (*visit)(binarytree_node<T> *);
+        static int count;//used to count nodes in subtree
         static void pre_order(binarytree_node<T> *t);
         static void in_order(binarytree_node<T> *t);
         static void post_order(binarytree_node<T> *t);
-
+        static void count_nodes(binarytree_node<T> *t);
+        static void dispose(binarytree_node<T> *t);
+        static void output(binarytree_node<T> *t);
+        static void add_to_nodes(binarytree_node<T> *t);
+        static int heith(binarytree_node<T> *t);
 };
 
 #include"template_lib.inl"
