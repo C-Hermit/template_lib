@@ -449,7 +449,7 @@ class chain_binarytree:public binarytree<T>
         bool empty()const;
         int length()const;
         T *root_element()const;
-        void make_tree(const T &element,binarytree_node<T>&,binarytree_node<T>&);
+        void make_tree(const T &element,chain_binarytree<T>&,chain_binarytree<T>&);
         void pre_order(void(*the_visit)(binarytree_node<T> *));
         void in_order(void (*the_visit)(binarytree_node<T> *));
         void post_order(void (*the_visit)(binarytree_node<T> *));

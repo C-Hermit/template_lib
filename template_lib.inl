@@ -1396,4 +1396,39 @@ void array_binarytree<T>::level_order_output(){level_order(output);std::cout<<st
 template<class T>
 void array_binarytree<T>::output(T *t){std::cout<<*t<<' ';};
 #endif
+template<class T>
+chain_binarytree<T>::chain_binarytree()
+{
+    root=NULL;
+    binarytree_length=0;
+};
+template<class T>
+chain_binarytree<T>::~chain_binarytree()
+{
+    post_order(dispose);
+    root=NULL;
+    binarytree_length=0;
+};
+template<class T>
+bool chain_binarytree<T>::empty()const{return binarytree_length==0;};
+template<class T>
+int chain_binarytree<T>::length()const{return binarytree_length;};
+template<class T>
+T *chain_binarytree<T>::root_element()const
+{
+    if (binarytree_length==0)
+        return NULL;
+    else
+        return &root->element;
+}
+template<class T>
+void chain_binarytree<T>::make_tree(const T &element,chain_binarytree<T> &left_child,chain_binarytree<T> &right_child)
+{
+    root=new binarytree_node<T>(element,left_child.root,right_child.root);
+    binarytree_length=left_child.length+right_child.length+1;
+
+    left_child.root=right_child.root=NULL;
+    left_child.length=right_child.length=0;
+}
+
 #endif
