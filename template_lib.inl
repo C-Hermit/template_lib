@@ -1464,7 +1464,8 @@ void chain_binarytree<T>::level_order(void (*the_visit)(binarytree_node<T> *))
         {
             q.push(t->right_child);
         }
-        if(t==q.front())
+        try{t=q.front();}
+        catch(const std::exception& e)
         {
             throw std::runtime_error("the binarytree is empty");
         }
