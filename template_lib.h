@@ -458,7 +458,7 @@ class chain_binarytree:public binarytree<T>
         void in_order_output();
         void post_order_output();
         void level_order_output();
-        void erase();
+        int height()const;
     protected:
         binarytree_node<T> *root;
         int binarytree_length;//the numbers of elements in binarytree
@@ -471,7 +471,7 @@ class chain_binarytree:public binarytree<T>
         static void dispose(binarytree_node<T> *t);
         static void output(binarytree_node<T> *t);
         static void add_to_nodes(binarytree_node<T> *t);
-        static int heith(binarytree_node<T> *t);
+        static int height(binarytree_node<T> *t);
 };
 
 #include"template_lib.inl"

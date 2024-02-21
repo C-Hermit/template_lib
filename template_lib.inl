@@ -1420,7 +1420,7 @@ T *chain_binarytree<T>::root_element()const
         return NULL;
     else
         return &root->element;
-}
+};
 template<class T>
 void chain_binarytree<T>::make_tree(const T &element,chain_binarytree<T> &left_child,chain_binarytree<T> &right_child)
 {
@@ -1429,6 +1429,107 @@ void chain_binarytree<T>::make_tree(const T &element,chain_binarytree<T> &left_c
 
     left_child.root=right_child.root=NULL;
     left_child.length=right_child.length=0;
-}
+};
+template<class T>
+void chain_binarytree<T>::pre_order(void (*the_visit) (binarytree_node<T> *))
+{
+    visit=the_visit;
+    pre_order(root);
+};
+template<class T>
+void chain_binarytree<T>::in_order(void (*the_visit) (binarytree_node<T> *))
+{
+    visit=the_visit;
+    in_order(root);
+};
+template<class T>
+void chain_binarytree<T>::post_order(void (*the_visit) (binarytree_node<T> *))
+{
+    visit=the_visit;
+    post_order(root);
+};
+template<class T>
+void chain_binarytree<T>::level_order(void (*the_visit)(binarytree_node<T> *))
+{
+    array_queue<binarytree_node<T> *>q;
+    binarytree_node<T> *t=root;
+    while (t!=NULL)
+    {
+        the_visit(t);
+        if (t->left_child!=NULL);
+        {
+            q.push(t->left_child);
+        }
+        if (t->right_child!=NULL)
+        {
+            q.push(t->right_child);
+        }
+        if(t==q.front())
+        {
+            throw std::runtime_error("the binarytree is empty");
+        }
+        q.pop();
+    }
+};
+template<class T>
+void chain_binarytree<T>::pre_order_output()
+{
+    pre_order(output);
+    std::cout<<std::endl;
+};
+template<class T>
+void chain_binarytree<T>::in_order_output()
+{
+    in_order(output);
+    std::cout<<std::endl;
+};
+template<class T>
+void chain_binarytree<T>::post_order_output()
+{
+    post_order(output);
+    std::cout<<std::endl;
+};
+template<class T>
+void chain_binarytree<T>::level_order_output()
+{
+    level_order(output);
+    std::cout<<std::endl;
+};
+template<class T>
+int chain_binarytree<T>::height()const{return heith(root);};
+template<class T>
+void chain_binarytree<T>::pre_order(binarytree_node<T> *t)
+{
+    if(t!=NULL)
+    {
+        chain_binarytree<T>::visit(t);
+        pre_order(t->left_child);
+        pre_order(t->right_child);
+    }
+};
+template<class T>
+void chain_binarytree<T>::in_order(binarytree_node<T> *t)
+{
+    if (t!=NULL)
+    {
+        in_order(t->left_child);
+        chain_binarytree<T>::visit(t);
+        in_order(t->right_child);
+    }
+};
+template<class T>
+void chain_binarytree<T>::post_order(binarytree_node<T> *t)
+{
+    if (t!=NULL)
+    {
+        post_order(t->left_child);
+        post_order(t->right_child);
+        chain_binarytree<T>::visit(t);
+    }
+};
+template<class T>
+void chain_binarytree<T>::count_nodes(binarytree_node<T> *t)
+{
 
+};
 #endif
