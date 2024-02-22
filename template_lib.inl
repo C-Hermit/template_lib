@@ -1531,6 +1531,11 @@ void chain_binarytree<T>::post_order(binarytree_node<T> *t)
 template<class T>
 void chain_binarytree<T>::count_nodes(binarytree_node<T> *t)
 {
-
+    visit=add_to_nodes;
+    count=0;
+    pre_order(t);
 };
+template<class T>
+void chain_binarytree<T>::add_to_nodes(binarytree_node<T> *t){count++;};
+
 #endif
