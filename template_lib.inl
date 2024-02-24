@@ -1537,5 +1537,20 @@ void chain_binarytree<T>::count_nodes(binarytree_node<T> *t)
 };
 template<class T>
 void chain_binarytree<T>::add_to_nodes(binarytree_node<T> *t){count++;};
-
+template<class T>
+void chain_binarytree<T>::dispose(binarytree_node<T> *t){delete t;};
+template<class T>
+void chain_binarytree<T>::output(binarytree_node<T> *t){std::cout<<t->element<<' ';};
+template<class T>
+int chain_binarytree<T>::height(binarytree_node<T> *t) 
+{
+    if (t==NULL)
+        return 0;
+    int left_h=height(t->left_child);
+    int right_h=height(t->right_child);
+    if(left_h>right_h)
+        return ++left_h;
+    else
+        return ++right_h;
+};
 #endif
