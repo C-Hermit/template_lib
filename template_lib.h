@@ -425,7 +425,7 @@ template<class T>
 class binarytree_node
 {
     public:
-        T *element;
+        T element;
         binarytree_node *left_child;
         binarytree_node *right_child;
         binarytree_node(){left_child=right_child=NULL;}
@@ -441,7 +441,7 @@ class binarytree_node
         }
 };
 template<class T>
-class chain_binarytree:public binarytree<T>
+class chain_binarytree:public binarytree<binarytree_node<T>>
 {
     public:
         chain_binarytree();
@@ -462,17 +462,16 @@ class chain_binarytree:public binarytree<T>
     protected:
         binarytree_node<T> *root;
         int binarytree_length;//the numbers of elements in binarytree
-        static void (*visit)(binarytree_node<T> *);
-        static int count;//used to count nodes in subtree
-        static void pre_order(binarytree_node<T> *t);
-        static void in_order(binarytree_node<T> *t);
-        static void post_order(binarytree_node<T> *t);
-        static void count_nodes(binarytree_node<T> *t);
+        void (*visit)(binarytree_node<T> *);
+        int count;//used to count nodes in subtree
+        void pre_order(binarytree_node<T> *t);
+        void in_order(binarytree_node<T> *t);
+        void post_order(binarytree_node<T> *t);
+        void count_nodes(binarytree_node<T> *t);
         static void dispose(binarytree_node<T> *t);
         static void output(binarytree_node<T> *t);
-        static void add_to_nodes(binarytree_node<T> *t);
+        void add_to_nodes(binarytree_node<T> *t);
         static int height(binarytree_node<T> *t);
 };
-
 #include"template_lib.inl"
 #endif

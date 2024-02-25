@@ -1396,6 +1396,15 @@ void array_binarytree<T>::level_order_output(){level_order(output);std::cout<<st
 template<class T>
 void array_binarytree<T>::output(T *t){std::cout<<*t<<' ';};
 #endif
+/* ---------------------------- chain_binarytree ---------------------------- */
+/*template<>
+void (*chain_binarytree<int>::visit)(binarytree_node<int>*);
+template<>
+void (*chain_binarytree<std::pair<int,int> >::visit)(binarytree_node<std::pair<int,int> >*);
+template<>
+void (*chain_binarytree<std::pair<const int,char> >::visit)(binarytree_node<std::pair<const int,char> >*);
+template<>
+void (*chain_binarytree<std::pair<const int,int> >::visit)(binarytree_node<std::pair<const int,int> >*);*/
 template<class T>
 chain_binarytree<T>::chain_binarytree()
 {
@@ -1425,10 +1434,10 @@ template<class T>
 void chain_binarytree<T>::make_tree(const T &element,chain_binarytree<T> &left_child,chain_binarytree<T> &right_child)
 {
     root=new binarytree_node<T>(element,left_child.root,right_child.root);
-    binarytree_length=left_child.length+right_child.length+1;
+    binarytree_length=left_child.binarytree_length+right_child.binarytree_length+1;
 
     left_child.root=right_child.root=NULL;
-    left_child.length=right_child.length=0;
+    left_child.binarytree_length=right_child.binarytree_length=0;
 };
 template<class T>
 void chain_binarytree<T>::pre_order(void (*the_visit) (binarytree_node<T> *))
@@ -1497,7 +1506,7 @@ void chain_binarytree<T>::level_order_output()
     std::cout<<std::endl;
 };
 template<class T>
-int chain_binarytree<T>::height()const{return heith(root);};
+int chain_binarytree<T>::height()const{return height(root);};
 template<class T>
 void chain_binarytree<T>::pre_order(binarytree_node<T> *t)
 {
