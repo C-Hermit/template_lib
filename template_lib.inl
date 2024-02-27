@@ -1285,7 +1285,7 @@ void hashchains_dictionary<K,E>::output(std::ostream &out)const
 template<class K,class E>
 std::ostream &operator<<(std::ostream &out,const hashchains_dictionary<K,E> &x){x.output(out);return out;};
 /* ---------------------------- array_binarytree ---------------------------- */
-#if 0
+
 template<class T>
 array_binarytree<T>::array_binarytree(int initial_capacity)
 {
@@ -1303,66 +1303,80 @@ bool array_binarytree<T>::empty()const{return binarytree_length==0;};
 template<class T>
 int array_binarytree<T>::length()const{return binarytree_length;};
 template<class T>
+T *array_binarytree<T>::root_element()const
+{
+    if (binarytree_length==0)
+    {
+        return NULL;
+    }
+    else
+    {
+        return element;
+    }
+};
+template<class T>
 void array_binarytree<T>::pre_order(void (*the_visit)(T *))
 {
     visit=the_visit;
-    pre_order(element,1);
+    pre_order(1);
 };
 template<class T>
 void array_binarytree<T>::in_order(void (*the_visit)(T *))
 {
     visit=the_visit;
-    in_order(element,1);
+    in_order(1);
 };
 template<class T>
 void array_binarytree<T>::post_order(void (*the_visit)(T *))
 {
     visit=the_visit;
-    post_order(element,1);
+    post_order(1);
 };
 template<class T>
-void array_binarytree<T>::pre_order(T *the_element,int i)
+void array_binarytree<T>::pre_order(int i)
 {
     if (i<binarytree_size)
     {
-        array_binarytree<T>::visit(the_element+i);
+        array_binarytree<T>::visit(element+i);
         if (2*i<binarytree_size)
         {
-            pre_order(the_element,2*i);
+            pre_order(2*i);
         }
         if (2*i+1<binarytree_size)
         {
-            pre_order(the_element,2*i+1);
+            pre_order(2*i+1);
         }
     }
 };
 template<class T>
-void array_binarytree<T>::in_order(T *the_element,int i)
+void array_binarytree<T>::in_order(int i)
 {
     if (i<binarytree_size)
     {
+        array_binarytree::visit(element+i);
         if (2*i<binarytree_size)
         {
-            in_order(the_element,2*i);
+            in_order(2*i);
         }
         if (2*i+1<binarytree_size)
         {
-            in_order(the_element,2*i+1);
+            in_order(2*i+1);
         }
     }
 }
 template<class T>
-void array_binarytree<T>::post_order(T *the_element,int i)
+void array_binarytree<T>::post_order(int i)
 {
     if (i<binarytree_size)
     {
+        array_binarytree<T>::visit(element+i);
         if (2*i<binarytree_size)
         {
-            post_order(the_element,2*i);
+            post_order(2*i);
         }
         if (2*i+1<binarytree_size)
         {
-            post_order(the_element,2*i+1);
+            post_order(2*i+1);
         }
     }
 };
@@ -1395,16 +1409,7 @@ template<class T>
 void array_binarytree<T>::level_order_output(){level_order(output);std::cout<<std::endl;};
 template<class T>
 void array_binarytree<T>::output(T *t){std::cout<<*t<<' ';};
-#endif
 /* ---------------------------- chain_binarytree ---------------------------- */
-/*template<>
-void (*chain_binarytree<int>::visit)(binarytree_node<int>*);
-template<>
-void (*chain_binarytree<std::pair<int,int> >::visit)(binarytree_node<std::pair<int,int> >*);
-template<>
-void (*chain_binarytree<std::pair<const int,char> >::visit)(binarytree_node<std::pair<const int,char> >*);
-template<>
-void (*chain_binarytree<std::pair<const int,int> >::visit)(binarytree_node<std::pair<const int,int> >*);*/
 template<class T>
 chain_binarytree<T>::chain_binarytree()
 {

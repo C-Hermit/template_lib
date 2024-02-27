@@ -3,19 +3,13 @@
 int main(void)
 {
     
-    chain_binarytree<int> a,x,y,z;
-    y.make_tree(1,a,a);
-    z.make_tree(2,a,a);
-    x.make_tree(3,y,z);
-    y.make_tree(4,x,a);
+    array_binarytree<int> a;
     if (a.empty())
     {
         std::cout<<"empty"<<std::endl;
     }
-    y.pre_order_output();
+    a.pre_order_output();
     std::cout << "Number of nodes = ";
-    std::cout << y.length() << std::endl;
-    std::cout << "height = ";
-    std::cout << y.height() << std::endl;
+    std::cout << a.length() << std::endl;
     return 0;
 }
