@@ -3,7 +3,9 @@
 int main(void)
 {
     
-    array_binarytree<int> a;
+    array_binarytree<int> a(10);
+    a.insert(1);
+    a.insert(1);
     if (a.empty())
     {
         std::cout<<"empty"<<std::endl;

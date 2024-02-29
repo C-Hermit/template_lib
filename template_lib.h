@@ -402,6 +402,7 @@ class array_binarytree:public binarytree<T>
         bool empty()const;
         int length()const;
         T *root_element()const;
+        void insert(T the_element);
         void pre_order(void (*the_visit)(T *));
         void in_order(void (*the_visit)(T *));
         void post_order(void (*the_visit)(T *));

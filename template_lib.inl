@@ -1285,13 +1285,11 @@ void hashchains_dictionary<K,E>::output(std::ostream &out)const
 template<class K,class E>
 std::ostream &operator<<(std::ostream &out,const hashchains_dictionary<K,E> &x){x.output(out);return out;};
 /* ---------------------------- array_binarytree ---------------------------- */
-
 template<class T>
 array_binarytree<T>::array_binarytree(int initial_capacity)
 {
     if (initial_capacity<1)
         throw std::runtime_error("the initial_capacity is invalid");
-    
     binarytree_length=0;
     binarytree_size=initial_capacity;
     element=new T[initial_capacity];
@@ -1313,6 +1311,18 @@ T *array_binarytree<T>::root_element()const
     {
         return element;
     }
+};
+template<class T>
+void array_binarytree<T>::insert(T the_element)
+{
+    if (binarytree_length==binarytree_size-1)
+    {
+        int* temp=new T[binarytree_size*2];
+        std::copy(element,element+binarytree_size-1,temp);
+        element=temp;
+    }
+    element[binarytree_length+1]=the_element;
+    binarytree_length++;
 };
 template<class T>
 void array_binarytree<T>::pre_order(void (*the_visit)(T *))
