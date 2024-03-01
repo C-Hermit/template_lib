@@ -473,5 +473,18 @@ class chain_binarytree:public binarytree<binarytree_node<T>>
         void add_to_nodes(binarytree_node<T> *t);
         static int height(binarytree_node<T> *t);
 };
+/* ---------------------------- maxpriority_queue --------------------------- */
+template<class T>
+class maxpriority_queue
+{
+    public:
+        virtual ~maxpriority_queue(){};
+        virtual bool empty()const=0;
+        virtual int size()const=0;
+        virtual const T &top()=0;
+        virtual void pop()=0;
+        virtual void push(const T &the_element)=0;
+};
+
 #include"template_lib.inl"
 #endif
