@@ -496,10 +496,13 @@ class array_maxpriority_queue:public maxpriority_queue<T>//maxheep
         const T &top();
         void pop();
         void push(const T &the_element);
+        void initialize(T *,int);
+        void deactivate_array();
+        void output(std::ostream &out)const;
     protected:
         T *heap;
-        int array_length;
-        int array_size;
+        int queue_length;
+        int queue_size;
 };
 #include"template_lib.inl"
 #endif
