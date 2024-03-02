@@ -480,11 +480,26 @@ class maxpriority_queue
     public:
         virtual ~maxpriority_queue(){};
         virtual bool empty()const=0;
-        virtual int size()const=0;
+        virtual int length()const=0;
         virtual const T &top()=0;
         virtual void pop()=0;
         virtual void push(const T &the_element)=0;
 };
-
+template<class T>
+class array_maxpriority_queue:public maxpriority_queue<T>//maxheep
+{
+    public:
+        array_maxpriority_queue();
+        ~array_maxpriority_queue();
+        bool empty()const;
+        int length()const;
+        const T &top();
+        void pop();
+        void push(const T &the_element);
+    protected:
+        T *heap;
+        int array_length;
+        int array_size;
+};
 #include"template_lib.inl"
 #endif
