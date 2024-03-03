@@ -1284,6 +1284,9 @@ void hashchains_dictionary<K,E>::output(std::ostream &out)const
 };
 template<class K,class E>
 std::ostream &operator<<(std::ostream &out,const hashchains_dictionary<K,E> &x){x.output(out);return out;};
+/* -------------------------------------------------------------------------- */
+/*                                 binarytree                                 */
+/* -------------------------------------------------------------------------- */
 /* ---------------------------- array_binarytree ---------------------------- */
 template<class T>
 array_binarytree<T>::array_binarytree(int initial_capacity)
@@ -1318,7 +1321,8 @@ void array_binarytree<T>::insert(T the_element)
     if (binarytree_length==binarytree_size-1)
     {
         int* temp=new T[binarytree_size*2];
-        std::copy(element,element+binarytree_size-1,temp);
+        std::copy(element,element+binarytree_size,temp);
+        delete[] element;
         element=temp;
     }
     element[binarytree_length+1]=the_element;
@@ -1577,4 +1581,103 @@ int chain_binarytree<T>::height(binarytree_node<T> *t)
     else
         return ++right_h;
 };
+/* ------------------------- array_maxpriority_queue ------------------------ */
+template<class T>
+array_maxpriority_queue<T>::array_maxpriority_queue(int initial_capacity)
+{
+    if (initial_capacity<1)
+        throw std::runtime_error("the initial_capacity is invaild");
+    queue=new T[initial_capacity];
+    queue_length=0;
+    queue_size=initial_capacity;
+};
+template<class T>
+array_maxpriority_queue<T>::~array_maxpriority_queue(){delete[] queue;};
+template<class T>
+bool array_maxpriority_queue<T>::empty()const{return queue_length==0;};
+template <class T>
+int array_maxpriority_queue<T>::length()const{return queue_length;};
+template<class T>
+const T &array_maxpriority_queue<T>::top()const
+{
+    if (queue_length==0)
+        throw std::runtime_error("the queue is empty");
+    return queue[1];
+};
+template<class T>
+void array_maxpriority_queue<T>::pop()
+{
+    if (queue_length==0)
+        throw std::runtime_error("the queue is empty");
+    T last_element=queue[queue_length];
+    int current_node=1;
+    int child=2;
+    while (child<=queue_length)
+    {
+        if(child<queue_length&&queue[child]<queue[child+1])
+            child++;
+        if (last_element>queue[child])
+            break;
+        queue[current_node]=queue[child];
+        current_node=child;
+        child*=2;
+    }
+    queue[current_node]=last_element;    
+};
+template<class T>
+void array_maxpriority_queue<T>::push(const T &the_element)
+{
+    if (queue_size==queue_length-1)
+    {
+        T *temp=new T[queue_size*2];
+        std::copy(queue,queue+queue_size,temp);
+        delete[] queue;
+        queue=temp;
+        queue_size*=2;
+    }
+    int current_node=++queue_length;//new the new of tree_node
+    while (current_node!=1||queue[current_node/2]<the_element)
+    {
+        queue[current_node]=queue[current_node/2];
+        current_node/=2;
+    }
+    queue[current_node]=the_element;
+};
+template<class T>
+void array_maxpriority_queue<T>::initialize(T *the_queue,int the_length)
+{
+    delete[] queue;
+    queue=the_queue;
+    queue_length=the_length;
+    //heapify
+    for(int root=queue_length/2;root>=1;root--)
+    {
+        T root_element=queue[root];
+        int child=2*root;
+        while(child<=queue_length)
+        {
+            if (child<queue_length&&queue[child]<queue[child+1])
+                child++;
+            if (root_element>=queue[child])
+                break;
+            queue[child/2]=queue[child];
+            child*=2;
+        }
+        queue[child/2]=root_element;
+    }
+};
+template<class T>
+void array_maxpriority_queue<T>::deactivate_array(){queue=NULL;queue_length=queue_size=0;};
+template<class T>
+void array_maxpriority_queue<T>::output(std::ostream &out)const
+{
+    for (int i = 0; i < queue_length; i++)
+    {
+        out<<queue[i]<<std::endl;
+    }
+    
+    //std::copy(queue,queue+queue_length+1,std::ostream_iterator<T>(std::cout,' '));
+};
+template<class T>
+std::ostream &operator<<(std::ostream &out,const array_maxpriority_queue<T> &x){x.output(out);return out;};
 #endif

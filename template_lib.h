@@ -478,10 +478,10 @@ template<class T>
 class maxpriority_queue
 {
     public:
-        virtual ~maxpriority_queue(){};
+        virtual ~maxpriority_queue(){}
         virtual bool empty()const=0;
         virtual int length()const=0;
-        virtual const T &top()=0;
+        virtual const T &top()const=0;
         virtual void pop()=0;
         virtual void push(const T &the_element)=0;
 };
@@ -489,18 +489,18 @@ template<class T>
 class array_maxpriority_queue:public maxpriority_queue<T>//maxheep
 {
     public:
-        array_maxpriority_queue();
+        array_maxpriority_queue(int initial_capacity=10);
         ~array_maxpriority_queue();
         bool empty()const;
         int length()const;
-        const T &top();
+        const T &top()const;
         void pop();
         void push(const T &the_element);
-        void initialize(T *,int);
+        void initialize(T *the_queue,int length);
         void deactivate_array();
         void output(std::ostream &out)const;
     protected:
-        T *heap;
+        T *queue;
         int queue_length;
         int queue_size;
 };
