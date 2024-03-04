@@ -504,5 +504,22 @@ class array_maxpriority_queue:public maxpriority_queue<T>//maxheep
         int queue_length;
         int queue_size;
 };
+template<class T>
+class chain_maxpriority_queue:public maxpriority_queue<T>,
+                              public chain_binarytree<std::pair<int,T>>
+{
+    public:
+        bool empty()const;
+        int length()const;
+        const T &top()const;
+        void pop();
+        void push(const T &the_element);
+        void initialize(T *the_element,int the_length);
+        void meld(chain_maxpriority_queue<T> &the_element);
+        void output();
+    private:
+        void meld(chain_binarytree<std::pair<int,T>> *&left_child,chain_binarytree<std::pair<int,T>> *&right_child);
+        static void nodeoutput(binarytree_node<std::pair<int,T>> *t);
+};
 #include"template_lib.inl"
 #endif
