@@ -1680,4 +1680,38 @@ void array_maxpriority_queue<T>::output(std::ostream &out)const
 };
 template<class T>
 std::ostream &operator<<(std::ostream &out,const array_maxpriority_queue<T> &x){x.output(out);return out;};
+/* ------------------------- chain_maxpriority_queue ------------------------ */
+template<class T>
+bool chain_maxpriority_queue<T>::empty()const{return binarytree_length==0;};
+template<class T>
+int chain_maxpriority_queue<T>::length()const{return binarytree_length;};
+template<class T>
+const T &chain_maxpriority_queue<T>::top()const
+{
+    if (binarytree_length==0)
+        throw std::runtime_error("the queue is empty");
+    return root->element.second;
+};
+template<class T>
+void chain_maxpriority_queue<T>::pop()
+{
+    if (root==NULL)
+        throw std::runtime_error("the queue is empty");
+    delete root;
+    meld(root.left_child,root.right_child);
+    binarytree_length--;
+};
+template<class T>
+void chain_maxpriority_queue<T>::push(const T &the_element)
+{
+    binarytree_node<std::pair<int,T>> *p=new binarytree_node<std::pair<int,T>>(1,the_element);
+    meld(root,p);
+    binarytree_length++;
+};
+template<class T>
+void chain_maxpriority_queue<T>::initialize(T *the_elements,int the_length)
+{
+    delete root;
+    root=the_elements;
+};
 #endif
