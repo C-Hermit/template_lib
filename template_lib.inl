@@ -1697,8 +1697,11 @@ void chain_maxpriority_queue<T>::pop()
 {
     if (root==NULL)
         throw std::runtime_error("the queue is empty");
+    binarytree_node<std::pair<int,T>> *left=root->left_child,
+                                      *right=root->right_child;
     delete root;
-    meld(root.left_child,root.right_child);
+    root=left;
+    meld(root,root.right);
     binarytree_length--;
 };
 template<class T>
@@ -1711,7 +1714,8 @@ void chain_maxpriority_queue<T>::push(const T &the_element)
 template<class T>
 void chain_maxpriority_queue<T>::initialize(T *the_elements,int the_length)
 {
-    delete root;
-    root=the_elements;
+        array_queue<std::pair<int,T>*> p(the_length);
+        for(int i=1;i<the_length;i++)
+            q.push(new binarytree_node<std::pair<int,T>>(std::pair<int,T>(1,the_elements[1]));
 };
 #endif
