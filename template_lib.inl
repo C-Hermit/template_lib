@@ -1716,6 +1716,7 @@ void chain_maxpriority_queue<T>::initialize(T *the_elements,int the_length)
 {
         array_queue<std::pair<int,T>*> p(the_length);
         for(int i=1;i<the_length;i++)
-            q.push(new binarytree_node<std::pair<int,T>>(std::pair<int,T>(1,the_elements[1]));
+            p.push(new binarytree_node<std::pair<int,T>>(std::pair<int,T>(1,the_elements[1])));
+        
 };
 #endif

@@ -21,7 +21,8 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "调试器生成的任务。"
+            "detail": "compiler: D:/Program Files/mingw64/bin/g++.exe"
+
         }
     ],
     "version": "2.0.0"
