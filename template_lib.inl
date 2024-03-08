@@ -1682,41 +1682,53 @@ template<class T>
 std::ostream &operator<<(std::ostream &out,const array_maxpriority_queue<T> &x){x.output(out);return out;};
 /* ------------------------- chain_maxpriority_queue ------------------------ */
 template<class T>
-bool chain_maxpriority_queue<T>::empty()const{return binarytree_length==0;};
+bool chain_maxpriority_queue<T>::empty()const{return this->binarytree_length==0;};
 template<class T>
-int chain_maxpriority_queue<T>::length()const{return binarytree_length;};
+int chain_maxpriority_queue<T>::length()const{return this->binarytree_length;};
 template<class T>
 const T &chain_maxpriority_queue<T>::top()const
 {
-    if (binarytree_length==0)
+    if (this->binarytree_length==0)
         throw std::runtime_error("the queue is empty");
-    return root->element.second;
+    return this->root->element.second;
 };
 template<class T>
 void chain_maxpriority_queue<T>::pop()
 {
-    if (root==NULL)
+    if (this->root==NULL)
         throw std::runtime_error("the queue is empty");
-    binarytree_node<std::pair<int,T>> *left=root->left_child,
-                                      *right=root->right_child;
-    delete root;
-    root=left;
-    meld(root,root.right);
-    binarytree_length--;
+    binarytree_node<std::pair<int,T>> *left=this->root->left_child,
+                                      *right=this->root->right_child;
+    delete this->root;
+    this->root=left;
+    meld(this->root,this->root.right);
+    this->binarytree_length--;
 };
 template<class T>
 void chain_maxpriority_queue<T>::push(const T &the_element)
 {
     binarytree_node<std::pair<int,T>> *p=new binarytree_node<std::pair<int,T>>(1,the_element);
-    meld(root,p);
-    binarytree_length++;
+    meld(this->root,p);
+    this->binarytree_length++;
 };
 template<class T>
 void chain_maxpriority_queue<T>::initialize(T *the_elements,int the_length)
 {
         array_queue<std::pair<int,T>*> p(the_length);
+        erase();
         for(int i=1;i<the_length;i++)
-            p.push(new binarytree_node<std::pair<int,T>>(std::pair<int,T>(1,the_elements[1])));
-        
+            p.push(new binarytree_node<std::pair<int,T>>(std::pair<int,T>(1,the_elements[i])));
+        for (int i = 0; i < the_length-1; i++)
+        {
+            binarytree_node<std::pair<int,T>> *b=p.front();
+            p.pop();
+            binarytree_node<std::pair<int,T>> *c=p.front();
+            p.pop();
+            meld(b,c);
+            p.push(b);
+        }
+        if (the_length>0)
+            this->root=p.front();
+        this->binarytree_length=the_length;
 };
 #endif
