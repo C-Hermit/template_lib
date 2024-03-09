@@ -518,7 +518,7 @@ class chain_maxpriority_queue:public maxpriority_queue<T>,
         void meld(chain_maxpriority_queue<T> &the_element);
         void output();
     private:
-        void meld(chain_binarytree<std::pair<int,T>> *&x,chain_binarytree<std::pair<int,T>> *&y);
+        void meld(binarytree_node<std::pair<int,T>> *&x,binarytree_node<std::pair<int,T>> *&y);
         static void nodeoutput(binarytree_node<std::pair<int,T>> *t);
 };
 #include"template_lib.inl"

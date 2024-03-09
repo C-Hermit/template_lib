@@ -1731,4 +1731,42 @@ void chain_maxpriority_queue<T>::initialize(T *the_elements,int the_length)
             this->root=p.front();
         this->binarytree_length=the_length;
 };
+template<class T>
+void chain_maxpriority_queue<T>::meld(chain_maxpriority_queue<T> &the_queue)
+{
+    meld(root,the_queue.root);
+    binarytree_length+=the_queue.binarytree_length;
+    the_queue.root=NULL;
+    the_queue.binarytree_length=0;
+}
+template<class T>
+void chain_maxpriority_queue<T>::meld(binarytree_node<std::pair<int,T>> *&x,binarytree_node<std::pair<int,T>>*&y)
+{
+    if (y==NULL)
+        return;
+    if (x==NULL)
+    {
+        x=y;
+        return;
+    }
+    if (x->element.second<y->element.second)
+        swab(x,y);
+    meld(x->right_child,y);
+    if (x->left_child=NULL)
+    {
+        x->left_child=x->right_child;
+        x->right_child=NULL;
+        x->element.first=1;
+    }
+    else
+    {
+        if (x->left_child->element.first<x->right_child->element.first)
+            swab(x->left_child,x->right_child);
+        x->element.first=x->right_child->element.first+1;
+    }
+};
+template<class T>
+void chain_maxpriority_queue<T>::output(){pre_order(nodeoutput());std::cout<<std::endl;};
+template<class T>
+void chain_maxpriority_queue<T>::nodeoutput(binarytree_node<std::pair<int,T>> *t){std::cout<<t->element.second<<' '};
 #endif
