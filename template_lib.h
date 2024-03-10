@@ -521,5 +521,14 @@ class chain_maxpriority_queue:public maxpriority_queue<T>,
         void meld(binarytree_node<std::pair<int,T>> *&x,binarytree_node<std::pair<int,T>> *&y);
         static void nodeoutput(binarytree_node<std::pair<int,T>> *t);
 };
+template<class T>
+class winnertree
+{
+    public:
+        virtual ~winnertree(){};
+        virtual void initialize(T *the_player,int the_number_of_player)=0;
+        virtual int winner()const=0;
+        virtual void replay(int the_player)=0;
+}
 #include"template_lib.inl"
 #endif
