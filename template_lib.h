@@ -522,13 +522,18 @@ class chain_maxpriority_queue:public maxpriority_queue<T>,
         static void nodeoutput(binarytree_node<std::pair<int,T>> *t);
 };
 template<class T>
-class winnertree
+class completetree
 {
     public:
-        virtual ~winnertree(){};
+        virtual ~completetree(){};
         virtual void initialize(T *the_player,int the_number_of_player)=0;
-        virtual int winner()const=0;
+        virtual int completer()const=0;
         virtual void replay(int the_player)=0;
+};
+template<class T>
+class  winner_complete_tree:public completetree<T>
+{
+    
 }
 #include"template_lib.inl"
 #endif
