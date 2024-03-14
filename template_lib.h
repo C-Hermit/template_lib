@@ -522,18 +522,32 @@ class chain_maxpriority_queue:public maxpriority_queue<T>,
         static void nodeoutput(binarytree_node<std::pair<int,T>> *t);
 };
 template<class T>
-class completetree
+class competitivetree
 {
     public:
-        virtual ~completetree(){};
+        virtual ~competitivetree(){};
         virtual void initialize(T *the_player,int the_number_of_player)=0;
-        virtual int completer()const=0;
+        virtual int competitor()const=0;
         virtual void replay(int the_player)=0;
 };
 template<class T>
-class  winner_complete_tree:public completetree<T>
+class  winner_competitivetree:public competitivetree<T>
 {
-    
+    public:
+        winner_competitivetree();
+        ~winner_competitivetree();
+        void initialise(T*,int);
+        int competitor()const;
+        int competitor(int i)const;
+        void replay(int the_player);
+        void output()const;
+    private:
+        int lowExt;           // lowest-level external nodes
+        int offset;           // 2^log(n-1) - 1
+        int *tree;            // array for winner tree
+        int numberOfPlayers;
+        T *player;            // array of players
+        void play(int, int, int);
 }
 #include"template_lib.inl"
 #endif
