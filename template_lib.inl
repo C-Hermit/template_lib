@@ -1769,4 +1769,10 @@ template<class T>
 void chain_maxpriority_queue<T>::output(){pre_order(nodeoutput());std::cout<<std::endl;};
 template<class T>
 void chain_maxpriority_queue<T>::nodeoutput(binarytree_node<std::pair<int,T>> *t){std::cout<<t->element.second<<' '};
+template<class T>
+winner_competitivetree<T>::winner_competitivetree(T *the_play,int player_number)
+{
+    tree=NULL;
+    initialise(T *the_play,int player_numder);
+};
 #endif

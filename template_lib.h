@@ -534,9 +534,9 @@ template<class T>
 class  winner_competitivetree:public competitivetree<T>
 {
     public:
-        winner_competitivetree();
+        winner_competitivetree(T *the_player,int player_number);
         ~winner_competitivetree();
-        void initialise(T*,int);
+        void initialise(T *the_player,int player_number);
         int competitor()const;
         int competitor(int i)const;
         void replay(int the_player);
