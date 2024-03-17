@@ -1775,4 +1775,11 @@ winner_competitivetree<T>::winner_competitivetree(T *the_play,int player_number)
     tree=NULL;
     initialise(T *the_play,int player_numder);
 };
+template<class T>
+winner_competitivetree<T>::~winner_competitivetree(){delete[] tree;};
+template<class T>
+int winner_competitivetree<T>::initialise(T *the_player,int player_number)
+{
+    player=the_player;
+};
 #endif

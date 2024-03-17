@@ -526,7 +526,7 @@ class competitivetree
 {
     public:
         virtual ~competitivetree(){};
-        virtual void initialize(T *the_player,int the_number_of_player)=0;
+        virtual void initialise(T *the_player,int the_number_of_player)=0;
         virtual int competitor()const=0;
         virtual void replay(int the_player)=0;
 };
