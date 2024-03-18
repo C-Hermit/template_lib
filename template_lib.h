@@ -458,6 +458,7 @@ class chain_binarytree:public binarytree<binarytree_node<T>>
         void in_order_output();
         void post_order_output();
         void level_order_output();
+        void erase();
         int height()const;
     protected:
         binarytree_node<T> *root;
@@ -521,6 +522,7 @@ class chain_maxpriority_queue:public maxpriority_queue<T>,
         void meld(binarytree_node<std::pair<int,T>> *&x,binarytree_node<std::pair<int,T>> *&y);
         static void nodeoutput(binarytree_node<std::pair<int,T>> *t);
 };
+/* ----------------------------- competitivetree ---------------------------- */
 template<class T>
 class competitivetree
 {
@@ -545,9 +547,9 @@ class  winner_competitivetree:public competitivetree<T>
         int lowExt;           // lowest-level external nodes
         int offset;           // 2^log(n-1) - 1
         int *tree;            // array for winner tree
-        int numberOfPlayers;
+        int players_number;
         T *player;            // array of players
         void play(int, int, int);
-}
+};
 #include"template_lib.inl"
 #endif

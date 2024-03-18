@@ -1431,12 +1431,7 @@ chain_binarytree<T>::chain_binarytree()
     binarytree_length=0;
 };
 template<class T>
-chain_binarytree<T>::~chain_binarytree()
-{
-    post_order(dispose);
-    root=NULL;
-    binarytree_length=0;
-};
+chain_binarytree<T>::~chain_binarytree(){erase();};
 template<class T>
 bool chain_binarytree<T>::empty()const{return binarytree_length==0;};
 template<class T>
@@ -1523,6 +1518,13 @@ void chain_binarytree<T>::level_order_output()
 {
     level_order(output);
     std::cout<<std::endl;
+};
+template<class T>
+void chain_binarytree<T>::erase()
+{
+    post_order(dispose);
+    root=NULL;
+    binarytree_length=0;
 };
 template<class T>
 int chain_binarytree<T>::height()const{return height(root);};
@@ -1715,7 +1717,7 @@ template<class T>
 void chain_maxpriority_queue<T>::initialize(T *the_elements,int the_length)
 {
         array_queue<std::pair<int,T>*> p(the_length);
-        erase();
+        this->erase();
         for(int i=1;i<the_length;i++)
             p.push(new binarytree_node<std::pair<int,T>>(std::pair<int,T>(1,the_elements[i])));
         for (int i = 0; i < the_length-1; i++)
@@ -1734,8 +1736,8 @@ void chain_maxpriority_queue<T>::initialize(T *the_elements,int the_length)
 template<class T>
 void chain_maxpriority_queue<T>::meld(chain_maxpriority_queue<T> &the_queue)
 {
-    meld(root,the_queue.root);
-    binarytree_length+=the_queue.binarytree_length;
+    meld(this->root,the_queue.root);
+    this->binarytree_length+=the_queue.binarytree_length;
     the_queue.root=NULL;
     the_queue.binarytree_length=0;
 }
@@ -1768,18 +1770,27 @@ void chain_maxpriority_queue<T>::meld(binarytree_node<std::pair<int,T>> *&x,bina
 template<class T>
 void chain_maxpriority_queue<T>::output(){pre_order(nodeoutput());std::cout<<std::endl;};
 template<class T>
-void chain_maxpriority_queue<T>::nodeoutput(binarytree_node<std::pair<int,T>> *t){std::cout<<t->element.second<<' '};
+void chain_maxpriority_queue<T>::nodeoutput(binarytree_node<std::pair<int,T>> *t){std::cout<<t->element.second<<' ';};
+/* ------------------------- winner_competitivetree ------------------------- */
 template<class T>
-winner_competitivetree<T>::winner_competitivetree(T *the_play,int player_number)
+winner_competitivetree<T>::winner_competitivetree(T *the_play,int the_players_number)
 {
     tree=NULL;
-    initialise(T *the_play,int player_numder);
+    initialise(the_play,the_players_number);
 };
 template<class T>
 winner_competitivetree<T>::~winner_competitivetree(){delete[] tree;};
 template<class T>
-int winner_competitivetree<T>::initialise(T *the_player,int player_number)
+void winner_competitivetree<T>::initialise(T *the_player,int the_player_number)
 {
+    int n=players_number;
+    if (n<2)
+        throw std::runtime_error("player_number is invaild");
+    players_number=n;
     player=the_player;
+    delete[] tree;
+    tree=new int[n];
+    int s;
+    for (s=0; 2*s < n; s++);
 };
 #endif
