@@ -1703,13 +1703,13 @@ void chain_maxpriority_queue<T>::pop()
                                       *right=this->root->right_child;
     delete this->root;
     this->root=left;
-    meld(this->root,this->root.right);
+    meld(this->root,this->root->right_child);
     this->binarytree_length--;
 };
 template<class T>
 void chain_maxpriority_queue<T>::push(const T &the_element)
 {
-    binarytree_node<std::pair<int,T>> *p=new binarytree_node<std::pair<int,T>>(1,the_element);
+    binarytree_node<std::pair<int,T>> *p=new binarytree_node<std::pair<int,T>>(std::pair<int,T>(1,the_element));
     meld(this->root,p);
     this->binarytree_length++;
 };
@@ -1742,7 +1742,7 @@ void chain_maxpriority_queue<T>::meld(chain_maxpriority_queue<T> &the_queue)
     the_queue.binarytree_length=0;
 }
 template<class T>
-void chain_maxpriority_queue<T>::meld(binarytree_node<std::pair<int,T>> *&x,binarytree_node<std::pair<int,T>>*&y)
+void chain_maxpriority_queue<T>::meld(binarytree_node<std::pair<int,T>>* &x,binarytree_node<std::pair<int,T>>* &y)
 {
     if (y==NULL)
         return;
@@ -1752,7 +1752,7 @@ void chain_maxpriority_queue<T>::meld(binarytree_node<std::pair<int,T>> *&x,bina
         return;
     }
     if (x->element.second<y->element.second)
-        swab(x,y);
+        swap(x,y);
     meld(x->right_child,y);
     if (x->left_child=NULL)
     {
@@ -1763,7 +1763,7 @@ void chain_maxpriority_queue<T>::meld(binarytree_node<std::pair<int,T>> *&x,bina
     else
     {
         if (x->left_child->element.first<x->right_child->element.first)
-            swab(x->left_child,x->right_child);
+            swap(x->left_child,x->right_child);
         x->element.first=x->right_child->element.first+1;
     }
 };
