@@ -765,11 +765,20 @@ void array_queue<T>::push(const T &the_element)
     if ((queue_back+1)%queue_size==queue_front)
     {
         T *temp=new T[queue_size*2];
-        std::copy(queue,queue+queue_size,temp);
-        std::copy(temp+queue_back,temp+queue_size,temp+queue_size-queue_back);
-        delete queue;
-        queue=temp;
+        int start=(queue_front+1)%queue_size;
+        if(start<2)
+        {
+            std::copy(queue+start,queue+start+queue_size-1,temp);
+        }
+        else
+        {
+            std::copy(queue+start,queue+queue_size,temp);
+            std::copy(queue,queue+queue_back+1,temp+queue_size-start);
+        }
+        queue_front=2*queue_size-1;
+        queue_back=queue_size-2;
         queue_size*=2;
+        queue=temp;
     }
     queue_back=(queue_back+1)%queue_size;
     queue[queue_back]=the_element;
@@ -1716,11 +1725,11 @@ void chain_maxpriority_queue<T>::push(const T &the_element)
 template<class T>
 void chain_maxpriority_queue<T>::initialize(T *the_elements,int the_length)
 {
-        array_queue<std::pair<int,T>*> p(the_length);
+        array_queue<binarytree_node<std::pair<int,T>>*> p(the_length);
         this->erase();
-        for(int i=1;i<the_length;i++)
+        for(int i=1;i<=the_length;i++)
             p.push(new binarytree_node<std::pair<int,T>>(std::pair<int,T>(1,the_elements[i])));
-        for (int i = 0; i < the_length-1; i++)
+        for (int i = 1; i <= the_length-1; i++)
         {
             binarytree_node<std::pair<int,T>> *b=p.front();
             p.pop();
@@ -1754,7 +1763,7 @@ void chain_maxpriority_queue<T>::meld(binarytree_node<std::pair<int,T>>* &x,bina
     if (x->element.second<y->element.second)
         swap(x,y);
     meld(x->right_child,y);
-    if (x->left_child=NULL)
+    if (x->left_child==NULL)
     {
         x->left_child=x->right_child;
         x->right_child=NULL;
@@ -1768,7 +1777,7 @@ void chain_maxpriority_queue<T>::meld(binarytree_node<std::pair<int,T>>* &x,bina
     }
 };
 template<class T>
-void chain_maxpriority_queue<T>::output(){pre_order(nodeoutput());std::cout<<std::endl;};
+void chain_maxpriority_queue<T>::output(){this->pre_order(nodeoutput);std::cout<<std::endl;};
 template<class T>
 void chain_maxpriority_queue<T>::nodeoutput(binarytree_node<std::pair<int,T>> *t){std::cout<<t->element.second<<' ';};
 /* ------------------------- winner_competitivetree ------------------------- */
