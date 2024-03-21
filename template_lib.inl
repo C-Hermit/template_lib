@@ -1802,4 +1802,9 @@ void winner_competitivetree<T>::initialise(T *the_player,int the_player_number)
     int s;
     for (s=0; 2*s < n; s++);
 };
+template<class T>
+int winner_competitivetree<T>::competitor()const{return tree[1];}
+template<class T>
+int winner_competitivetree<T>::competitor(int i)const{return (i<players_number)?tree[i]:0;};
+
 #endif
