@@ -1806,5 +1806,25 @@ template<class T>
 int winner_competitivetree<T>::competitor()const{return tree[1];}
 template<class T>
 int winner_competitivetree<T>::competitor(int i)const{return (i<players_number)?tree[i]:0;};
+template<class T>
+void winner_competitivetree<T>::replay(int the_player)
+{
+    int n = players_number;
+    if (the_player<=0||the_player>n)
+        throw std::runtime_error("the_plary is invaild");
+    int match_node,  //
+        left_child, //right match node
+        right_child;//left match node
+    if (the_player<=lowExt)
+    {
+        match_node=(offset+the_player)/2;
+        left_child=2*match_node-offset;
+        right_child=left_child+1;
+    }
+    else
+    {
 
+    }
+    
+};
 #endif
