@@ -1657,6 +1657,8 @@ void array_maxpriority_queue<T>::push(const T &the_element)
 template<class T>
 void array_maxpriority_queue<T>::initialize(T *the_queue,int the_length)
 {
+    if (the_length>queue_size-1)
+        throw std::runtime_error("the_length is invaild");
     delete[] queue;
     queue=the_queue;
     queue_length=the_length;
