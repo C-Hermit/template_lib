@@ -1825,7 +1825,16 @@ void winner_competitivetree<T>::replay(int the_player)
     }
     else
     {
-
+        match_node=(the_player-offset+n-1)/2;
+        if (2*match_node==n-1)
+        {
+            left_child=tree[2*match_node];
+            right_child=the_player;
+        }
+        else
+        {
+            left_child=2*match_node-n+1+lowExt;
+        }
     }
     
 };
