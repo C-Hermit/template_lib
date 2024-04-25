@@ -1794,15 +1794,30 @@ winner_competitivetree<T>::~winner_competitivetree(){delete[] tree;};
 template<class T>
 void winner_competitivetree<T>::initialise(T *the_player,int the_player_number)
 {
-    int n=players_number;
+    int n=the_player_number;
     if (n<2)
         throw std::runtime_error("player_number is invaild");
     players_number=n;
     player=the_player;
     delete[] tree;
     tree=new int[n];
-    int s;
-    for (s=0; 2*s < n; s++);
+    int i,s;
+    for (s=1; 2*s < n; s*=2);
+    lowExt=2*(n-s);
+    offset=2*s-1;
+
+    for (i = 2; i <= lowExt; i+=2)
+        play((offset+i)/2,i,i-1);
+    if (n%2==1)
+    {
+        play(n/2,tree[n-1],lowExt+i);
+        i=lowExt+3;
+    }
+    else i=lowExt+2;
+
+    
+    
+    
 };
 template<class T>
 int winner_competitivetree<T>::competitor()const{return tree[1];}
