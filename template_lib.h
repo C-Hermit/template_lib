@@ -533,15 +533,15 @@ class competitivetree
         virtual void replay(int the_player)=0;
 };
 template<class T>
-class  winner_competitivetree:public competitivetree<T>
+class  maxwinner_competitivetree:public competitivetree<T>
 {
     public:
-        winner_competitivetree(T *the_player,int player_number);
-        ~winner_competitivetree();
+        maxwinner_competitivetree(T *the_player,int player_number);
+        ~maxwinner_competitivetree();
         void initialise(T *the_player,int player_number);
         int competitor()const;
         int competitor(int i)const;
-        void replay(int the_player);
+        void replay(int the_player);//replay matchs for the player
         void output()const;
     private:
         int lowExt;           // lowest-level external nodes

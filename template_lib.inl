@@ -1782,56 +1782,73 @@ template<class T>
 void chain_maxpriority_queue<T>::output(){this->pre_order(nodeoutput);std::cout<<std::endl;};
 template<class T>
 void chain_maxpriority_queue<T>::nodeoutput(binarytree_node<std::pair<int,T>> *t){std::cout<<t->element.second<<' ';};
-/* ------------------------- winner_competitivetree ------------------------- */
+/* ------------------------- maxwinner_competitivetree ------------------------- */
 template<class T>
-winner_competitivetree<T>::winner_competitivetree(T *the_play,int the_players_number)
+maxwinner_competitivetree<T>::maxwinner_competitivetree(T *the_play,int the_players_number)
 {
     tree=NULL;
     initialise(the_play,the_players_number);
 };
 template<class T>
-winner_competitivetree<T>::~winner_competitivetree(){delete[] tree;};
+maxwinner_competitivetree<T>::~maxwinner_competitivetree(){delete[] tree;};
 template<class T>
-void winner_competitivetree<T>::initialise(T *the_player,int the_player_number)
+void maxwinner_competitivetree<T>::initialise(T *the_player,int the_player_number)
 {
-    int n=the_player_number;
-    if (n<2)
+    if (the_player_number;<2)
         throw std::runtime_error("player_number is invaild");
-    players_number=n;
+
+    players_number=the_player_number;
     player=the_player;
     delete[] tree;
-    tree=new int[n];
+    tree=new int[players_number];
+
+    //compute s(lowest-level leftmost internal node)
     int i,s;
-    for (s=1; 2*s < n; s*=2);
-    lowExt=2*(n-s);
+    for (s=1; 2*s < players_number; s*=2);
+
+    lowExt=2*(players_number-s);
     offset=2*s-1;
 
+    //play matchs for lowext-level external nodes
     for (i = 2; i <= lowExt; i+=2)
         play((offset+i)/2,i,i-1);
+    
     if (n%2==1)
     {
-        play(n/2,tree[n-1],lowExt+i);
+        play(n/2,tree[n-1],lowExt+1);
         i=lowExt+3;
     }
     else i=lowExt+2;
 
-    
-    
+    for (; i < players_number; i+=2)
+        play((i-lowExt+n-1),i,i-1);
+};
+template<class T>
+int maxwinner_competitivetree<T>::competitor()const{return tree[1];}
+template<class T>
+int maxwinner_competitivetree<T>::competitor(int i)const{return (i<players_number)?tree[i]:0;};
+template<class T>
+void maxwinner_competitivetree<T>::play(int match_node,int left_node,int right_node)
+{
+    tree[match_node]=(player[left_node]>=player[right_node])?left_node:right_node;
+    if (match_node%2==1&&match_node>1)
+    {
+        tree[match_node/2]=(player[tree[match_node-1]]>=player[tree[match_node]])?tree[match_node-1]:tree[match_node];
+        match_node/=2;
+    }
     
 };
 template<class T>
-int winner_competitivetree<T>::competitor()const{return tree[1];}
-template<class T>
-int winner_competitivetree<T>::competitor(int i)const{return (i<players_number)?tree[i]:0;};
-template<class T>
-void winner_competitivetree<T>::replay(int the_player)
+void maxwinner_competitivetree<T>::replay(int the_player)
 {
     int n = players_number;
     if (the_player<=0||the_player>n)
         throw std::runtime_error("the_plary is invaild");
-    int match_node,  //
-        left_child, //right match node
-        right_child;//left match node
+
+    int match_node, 
+        left_child, 
+        right_child;
+    //find match_node and its child_node
     if (the_player<=lowExt)
     {
         match_node=(offset+the_player)/2;
@@ -1840,7 +1857,7 @@ void winner_competitivetree<T>::replay(int the_player)
     }
     else
     {
-        match_node=(the_player-offset+n-1)/2;
+        match_node=(the_player-lowExt+n-1)/2;
         if (2*match_node==n-1)
         {
             left_child=tree[2*match_node];
@@ -1848,9 +1865,21 @@ void winner_competitivetree<T>::replay(int the_player)
         }
         else
         {
-            left_child=2*match_node-n+1+lowExt;
+            left_child=2*match_node+lowExt-n+1;
+            right_child=left_child+1;
         }
     }
     
+    tree[match_node]=(player[left_child]>=player[right_child])?left_child:right_child;
+    if (match_node==n-1&&match_node%2==1)
+    {
+        match_node/=2;
+        tree[match_node]=(player[tree[n-1]]>=player[lowExt+1])?tree[n-1]:lowExt+1;
+    }
+    else
+    {
+        match_node/=2;
+        tree[match_node]=(player[tree[2*match_node]]>=player[tree[2*match_node+1]])?tree[2*match_node]:tree[2*match_node+1];
+    }
 };
 #endif
