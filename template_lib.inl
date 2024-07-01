@@ -1794,7 +1794,7 @@ maxwinner_competitivetree<T>::~maxwinner_competitivetree(){delete[] tree;};
 template<class T>
 void maxwinner_competitivetree<T>::initialise(T *the_player,int the_player_number)
 {
-    if (the_player_number;<2)
+    if (the_player_number<2)
         throw std::runtime_error("player_number is invaild");
 
     players_number=the_player_number;
@@ -1811,17 +1811,17 @@ void maxwinner_competitivetree<T>::initialise(T *the_player,int the_player_numbe
 
     //play matchs for lowext-level external nodes
     for (i = 2; i <= lowExt; i+=2)
-        play((offset+i)/2,i,i-1);
+        play((offset+i)/2,i-1,i);
     
-    if (n%2==1)
+    if (players_number%2==1)
     {
-        play(n/2,tree[n-1],lowExt+1);
+        play(players_number/2,tree[players_number-1],lowExt+1);
         i=lowExt+3;
     }
     else i=lowExt+2;
 
-    for (; i < players_number; i+=2)
-        play((i-lowExt+n-1),i,i-1);
+    for (; i <= players_number; i+=2)
+        play((i-lowExt+players_number-1)/2,i-1,i);
 };
 template<class T>
 int maxwinner_competitivetree<T>::competitor()const{return tree[1];}
@@ -1831,7 +1831,7 @@ template<class T>
 void maxwinner_competitivetree<T>::play(int match_node,int left_node,int right_node)
 {
     tree[match_node]=(player[left_node]>=player[right_node])?left_node:right_node;
-    if (match_node%2==1&&match_node>1)
+    while (match_node%2==1&&match_node>1)
     {
         tree[match_node/2]=(player[tree[match_node-1]]>=player[tree[match_node]])?tree[match_node-1]:tree[match_node];
         match_node/=2;
@@ -1882,4 +1882,15 @@ void maxwinner_competitivetree<T>::replay(int the_player)
         tree[match_node]=(player[tree[2*match_node]]>=player[tree[2*match_node+1]])?tree[2*match_node]:tree[2*match_node+1];
     }
 };
+template<class T>
+void maxwinner_competitivetree<T>::output()const
+{
+    std::cout<<"number of players ="<<players_number
+             <<"lowExt ="<<lowExt
+             <<"offset ="<<offset<<std::endl;
+    std::cout<<"maxnum winner completitive tree are"<<std::endl;
+    for (int i = 1; i < players_number; i++)
+        std::cout<<tree[i]<<' ';
+    std::cout<<std::endl;
+}
 #endif
