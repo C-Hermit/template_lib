@@ -1839,8 +1839,9 @@ void maxwinner_competitivetree<T>::play(int match_node,int left_node,int right_n
     
 };
 template<class T>
-void maxwinner_competitivetree<T>::replay(int the_player)
+void maxwinner_competitivetree<T>::replay(int the_player,T the_player_element)
 {
+    player[the_player]=the_player_element;
     int n = players_number;
     if (the_player<=0||the_player>n)
         throw std::runtime_error("the_plary is invaild");
@@ -1869,18 +1870,46 @@ void maxwinner_competitivetree<T>::replay(int the_player)
             right_child=left_child+1;
         }
     }
-    
-    tree[match_node]=(player[left_child]>=player[right_child])?left_child:right_child;
+
+    if (player[tree[match_node]]<the_player_element&&tree[match_node]!=the_player)
+    {
+        tree[match_node]=the_player;
+    }
+    else return;
+    if (match_node==n-1&&match_node%2==1)
+    {
+        match_node/=2;
+        left_child=tree[n-1];
+        right_child=lowExt+1;
+        if (player[tree[match_node]]<the_player_element&&tree[match_node]!=the_player)
+        {
+            tree[match_node]=the_player;
+        }
+        else return;
+    }
+    match_node/=2;
+    for(;match_node>=1;match_node/=2)
+    {
+        left_child=tree[2*match_node];
+        right_child=tree[2*match_node+1];
+        if (player[tree[match_node]]<the_player_element&&tree[match_node]!=the_player)
+        {
+            tree[match_node]=the_player;
+        }
+        else return;
+    }
+    /*tree[match_node]=(player[left_child]>=player[right_child])?left_child:right_child;
     if (match_node==n-1&&match_node%2==1)
     {
         match_node/=2;
         tree[match_node]=(player[tree[n-1]]>=player[lowExt+1])?tree[n-1]:lowExt+1;
     }
-    else
+    match_node/=2;
+    for(;match_node>=1;match_node/=2)
     {
-        match_node/=2;
         tree[match_node]=(player[tree[2*match_node]]>=player[tree[2*match_node+1]])?tree[2*match_node]:tree[2*match_node+1];
     }
+    */
 };
 template<class T>
 void maxwinner_competitivetree<T>::output()const
