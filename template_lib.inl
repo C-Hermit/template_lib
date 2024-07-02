@@ -1912,4 +1912,42 @@ void maxwinner_competitivetree<T>::output()const
         std::cout<<tree[i]<<' ';
     std::cout<<std::endl;
 }
+/* ------------------------ maxloser_competitivetree ------------------------ */
+template<class T>
+maxloser_competitivetree<T>::maxloser_competitivetree(T *the_player,int the_player_number)
+{
+    tree=NULL;
+    initialise(the_player,the_player_number);
+};
+template<class T>
+maxloser_competitivetree<T>::~maxloser_competitivetree(){delete[] tree};
+template<class T>
+void maxloser_competitivetree<T>::initialise(T *the_player,int the_player_number)
+{
+    if (the_player_number<1)
+    {
+        throw std::runtime_error("the_player_number in invaild");
+    }
+    player_number=the_player_number;
+    player=the_player;
+    delete[] tree;
+    tree=new int[player_number];
+
+    //compute s(lowest-level leftmost internal node)
+    int i,s;
+    for(s=1;2*s<player_number;s*=2)
+    lowExt=2*(player_number-s);
+    offset=2*s-1;
+
+    for (i = 2; i < lowExt; i+=2)
+        play((offset+i)/2,i-1,i);
+    //special case
+    if (player_number%2==1)
+    {
+        i=lowExt+3;
+    }
+    else i=lowExt+2;
+    for (; i < player_number; i+=2)
+        play((i-lowExt+player_number-1)/2,i-1,i);
+};
 #endif

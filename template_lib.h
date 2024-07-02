@@ -538,7 +538,7 @@ class  maxwinner_competitivetree:public competitivetree<T>
     public:
         maxwinner_competitivetree(T *the_player,int player_number);
         ~maxwinner_competitivetree();
-        void initialise(T *the_player,int player_number);
+        void initialise(T *the_player,int the_player_number);
         int competitor()const;
         int competitor(int i)const;
         void replay(int the_player,T the_player_element);//replay matchs for the player
@@ -549,7 +549,26 @@ class  maxwinner_competitivetree:public competitivetree<T>
         int *tree;            // array for winner tree
         int players_number;
         T *player;            // array of players
-        void play(int, int, int);
+        void play(int match_node, int left_child, int right_child);
 };
+template<class T>
+class maxloser_competitivetree:public competitivetree<T>
+{
+    public:
+        maxloser_competitivetree(T *the_player,int player_number);
+        ~maxloser_competitivetree();
+        void initialise(T *the_player,int the_player_number);
+        int competitor()const;
+        int competitor(int i)const;
+        void replay(int the_player,T the_player_element);
+        void output()const;
+    private:
+        int lowExt;
+        int offset;
+        int *tree;
+        int player_number;
+        T *player;
+        void play(int match_node,int left_child,int right_child);
+}
 #include"template_lib.inl"
 #endif
