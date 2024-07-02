@@ -1870,10 +1870,10 @@ void maxwinner_competitivetree<T>::replay(int the_player,T the_player_element)
             right_child=left_child+1;
         }
     }
-
-    if (tree[match_node]!=(player[left_child]>=player[right_child])?left_child:right_child)
+    T winner=(player[left_child]>=player[right_child])?left_child:right_child;
+    if (tree[match_node]!=winner)
     {
-        tree[match_node]=(player[left_child]>=player[right_child])?left_child:right_child;
+        tree[match_node]=winner;
     }
     else return; 
     if (match_node==n-1&&match_node%2==1)
@@ -1881,9 +1881,10 @@ void maxwinner_competitivetree<T>::replay(int the_player,T the_player_element)
         match_node/=2;
         left_child=tree[n-1];
         right_child=lowExt+1;
-        if (tree[match_node]!=(player[left_child]>=player[right_child])?left_child:right_child)
+        winner=(player[left_child]>=player[right_child])?left_child:right_child;
+        if (tree[match_node]!=winner)
         {
-            tree[match_node]=(player[left_child]>=player[right_child])?left_child:right_child;
+            tree[match_node]=winner;
         }
         else return;
     }
@@ -1892,9 +1893,10 @@ void maxwinner_competitivetree<T>::replay(int the_player,T the_player_element)
     {
         left_child=tree[2*match_node];
         right_child=tree[2*match_node+1];
-        if (tree[match_node]!=(player[left_child]>=player[right_child])?left_child:right_child)
+        winner=(player[left_child]>=player[right_child])?left_child:right_child;
+        if (tree[match_node]!=winner)
         {
-            tree[match_node]=(player[left_child]>=player[right_child])?left_child:right_child;
+            tree[match_node]=winner;
         }
         else return;
     }
