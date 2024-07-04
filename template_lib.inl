@@ -1916,11 +1916,12 @@ void maxwinner_competitivetree<T>::output()const
 template<class T>
 maxloser_competitivetree<T>::maxloser_competitivetree(T *the_player,int the_player_number)
 {
+    advance=NULL;
     tree=NULL;
     initialise(the_player,the_player_number);
 };
 template<class T>
-maxloser_competitivetree<T>::~maxloser_competitivetree(){delete[] tree};
+maxloser_competitivetree<T>::~maxloser_competitivetree(){delete[] tree;delete[] advance;};
 template<class T>
 void maxloser_competitivetree<T>::initialise(T *the_player,int the_player_number)
 {
@@ -1930,16 +1931,18 @@ void maxloser_competitivetree<T>::initialise(T *the_player,int the_player_number
     }
     player_number=the_player_number;
     player=the_player;
+    delete[] advance;
     delete[] tree;
+    advance=new int[player_number];
     tree=new int[player_number];
 
     //compute s(lowest-level leftmost internal node)
     int i,s;
-    for(s=1;2*s<player_number;s*=2)
+    for(s=1;2*s<player_number;s*=2);
     lowExt=2*(player_number-s);
     offset=2*s-1;
 
-    for (i = 2; i < lowExt; i+=2)
+    for (i = 2; i <=lowExt; i+=2)
         play((offset+i)/2,i-1,i);
     //special case
     if (player_number%2==1)
@@ -1947,8 +1950,9 @@ void maxloser_competitivetree<T>::initialise(T *the_player,int the_player_number
         i=lowExt+3;
     }
     else i=lowExt+2;
-    for (; i < player_number; i+=2)
+    for (; i <=player_number; i+=2)
         play((i-lowExt+player_number-1)/2,i-1,i);
+    tree[0]=advance[1];
 };
 template<class T>
 int maxloser_competitivetree<T>::competitor()const{return tree[0];};
@@ -1957,6 +1961,120 @@ int maxloser_competitivetree<T>::competitor(int i)const{return (i<player_number&
 template<class T>
 void maxloser_competitivetree<T>::play(int match_node,int left_child,int right_child)
 {
-    tree[match_node]=(player[left_child]<=player[right_child])?left_child:right_child;
+    if (player[left_child]<=player[right_child])
+    {
+        tree[match_node]=left_child;
+        advance[match_node]=right_child;
+    }
+    else
+    {
+        tree[match_node]=right_child;
+        advance[match_node]=left_child;
+    }
+    while (match_node%2==1&&match_node>1)
+    {
+        if (player[advance[match_node]]<=player[advance[match_node-1]])
+        {
+            tree[match_node/2]=advance[match_node];
+            advance[match_node/2]=advance[match_node-1];
+        }
+        else
+        {
+            tree[match_node/2]=advance[match_node-1];
+            advance[match_node/2]=advance[match_node];
+        }
+        match_node/=2;
+    }
+};
+template<class T>
+void maxloser_competitivetree<T>::replay(int the_player,T the_player_element)
+{
+    if (the_player>player_number&&the_player<0)
+        throw std::runtime_error("the_player is invaild");
+    
+    player[the_player]=the_player_element;
+    
+    int match_node,
+        left_child,
+        right_child;
+
+    //find match_node and its child
+    if(the_player<=lowExt)
+    {
+        match_node=(offset+the_player)/2;
+        left_child=2*match_node-offset;
+        right_child=left_child+1;
+    }
+    else
+    {
+        match_node=(the_player-lowExt+player_number-1)/2;
+        if (2*match_node==player_number-1&&player_number%2==1)
+        {
+            left_child=advance[player_number-1];
+            right_child=the_player;
+        }
+        else
+        {
+            left_child=2*match_node+lowExt-player_number+1;
+            right_child=left_child+1;            
+        }
+    }
+
+    //replay
+    if (player[left_child]<=player[right_child])
+    {
+        tree[match_node]=left_child;
+        advance[match_node]=right_child;
+    }
+    else
+    {
+        tree[match_node]=right_child;
+        advance[match_node]=left_child;
+    }
+    if (match_node==player_number-1&&player_number%2==1)
+    {
+        match_node/=2;
+        left_child=advance[player_number-1];
+        right_child=lowExt+1;
+        if (player[left_child]<=player[right_child])
+        {
+            tree[match_node]=left_child;
+            advance[match_node]=right_child;
+        }
+        else
+        {
+            tree[match_node]=right_child;
+            advance[match_node]=left_child;
+        }
+    }
+    match_node/=2;
+    for(;match_node>=1;match_node/=2)
+    {
+        left_child=advance[2*match_node];
+        right_child=advance[2*match_node+1];
+        if (player[left_child]<=player[right_child])
+        {
+            tree[match_node]=left_child;
+            advance[match_node]=right_child;
+        }
+        else
+        {
+            tree[match_node]=right_child;
+            advance[match_node]=left_child;
+        }
+    }
+    tree[0]=advance[1];
 }
+template<class T>
+void maxloser_competitivetree<T>::output()const
+{
+    std::cout<<"number of players ="<<player_number<<" "
+             <<"lowExt ="<<lowExt<<" "
+             <<"offset ="<<offset<<std::endl;
+    std::cout<<"maxnum loser competitive tree are"<<std::endl;
+    for (int i = 0; i < player_number; i++)
+        std::cout<<tree[i]<<" ";
+    std::cout<<std::endl;
+    
+};
 #endif

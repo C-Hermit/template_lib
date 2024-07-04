@@ -566,9 +566,10 @@ class maxloser_competitivetree:public competitivetree<T>
         int lowExt;
         int offset;
         int *tree;
+        int *advance;
         int player_number;
         T *player;
         void play(int match_node,int left_child,int right_child);
-}
+};
 #include"template_lib.inl"
 #endif
