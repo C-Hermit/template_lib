@@ -1841,11 +1841,11 @@ void maxwinner_competitivetree<T>::play(int match_node,int left_node,int right_n
 template<class T>
 void maxwinner_competitivetree<T>::replay(int the_player,T the_player_element)
 {
-    player[the_player]=the_player_element;
     int n = players_number;
     if (the_player<=0||the_player>n)
         throw std::runtime_error("the_plary is invaild");
 
+    player[the_player]=the_player_element;
     int match_node, 
         left_child, 
         right_child;
@@ -1950,4 +1950,13 @@ void maxloser_competitivetree<T>::initialise(T *the_player,int the_player_number
     for (; i < player_number; i+=2)
         play((i-lowExt+player_number-1)/2,i-1,i);
 };
+template<class T>
+int maxloser_competitivetree<T>::competitor()const{return tree[0];};
+template<class T>
+int maxloser_competitivetree<T>::competitor(int i)const{return (i<player_number&&i>=0)?tree[i]:0;};
+template<class T>
+void maxloser_competitivetree<T>::play(int match_node,int left_child,int right_child)
+{
+    tree[match_node]=(player[left_child]<=player[right_child])?left_child:right_child;
+}
 #endif
