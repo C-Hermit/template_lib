@@ -2021,47 +2021,50 @@ void maxloser_competitivetree<T>::replay(int the_player,T the_player_element)
     }
 
     //replay
-    if (player[left_child]<=player[right_child])
+    if (player[the_player]<=player[advance[match_node]])
     {
-        tree[match_node]=left_child;
-        advance[match_node]=right_child;
+        advance[match_node]=tree[match_node];
+        tree[match_node]=the_player;
+        return;
     }
-    else
+    else 
     {
-        tree[match_node]=right_child;
-        advance[match_node]=left_child;
-    }
+        tree[match_node]=advance[match_node];
+        advance[match_node]=the_player;
+    };
     if (match_node==player_number-1&&player_number%2==1)
     {
         match_node/=2;
         left_child=advance[player_number-1];
         right_child=lowExt+1;
-        if (player[left_child]<=player[right_child])
+        if (player[the_player]<=player[advance[match_node]])
         {
-            tree[match_node]=left_child;
-            advance[match_node]=right_child;
+            advance[match_node]=tree[match_node];
+            tree[match_node]=the_player;
+            return;
         }
-        else
+        else 
         {
-            tree[match_node]=right_child;
-            advance[match_node]=left_child;
-        }
+            tree[match_node]=advance[match_node];
+            advance[match_node]=the_player;
+        };
     }
     match_node/=2;
     for(;match_node>=1;match_node/=2)
     {
         left_child=advance[2*match_node];
         right_child=advance[2*match_node+1];
-        if (player[left_child]<=player[right_child])
+        if (player[the_player]<=player[advance[match_node]])
         {
-            tree[match_node]=left_child;
-            advance[match_node]=right_child;
+            advance[match_node]=tree[match_node];
+            tree[match_node]=the_player;
+            return;
         }
-        else
+        else 
         {
-            tree[match_node]=right_child;
-            advance[match_node]=left_child;
-        }
+            tree[match_node]=advance[match_node];
+            advance[match_node]=the_player;
+        };
     }
     tree[0]=advance[1];
 }
@@ -2075,6 +2078,5 @@ void maxloser_competitivetree<T>::output()const
     for (int i = 0; i < player_number; i++)
         std::cout<<tree[i]<<" ";
     std::cout<<std::endl;
-    
 };
 #endif
