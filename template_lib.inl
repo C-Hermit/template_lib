@@ -2035,8 +2035,6 @@ void maxloser_competitivetree<T>::replay(int the_player,T the_player_element)
     if (match_node==player_number-1&&player_number%2==1)
     {
         match_node/=2;
-        left_child=advance[player_number-1];
-        right_child=lowExt+1;
         if (player[the_player]<=player[advance[match_node]])
         {
             advance[match_node]=tree[match_node];
@@ -2052,8 +2050,6 @@ void maxloser_competitivetree<T>::replay(int the_player,T the_player_element)
     match_node/=2;
     for(;match_node>=1;match_node/=2)
     {
-        left_child=advance[2*match_node];
-        right_child=advance[2*match_node+1];
         if (player[the_player]<=player[advance[match_node]])
         {
             advance[match_node]=tree[match_node];
