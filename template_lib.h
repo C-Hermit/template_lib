@@ -571,5 +571,24 @@ class maxloser_competitivetree:public competitivetree<T>
         T *player;
         void play(int match_node,int left_child,int right_child);
 };
+/* --------------------------------- binary_search_tree --------------------------------- */
+template<class k,class E>
+class bs_tree:pubilc dictionary<k,E>
+{
+    public:
+        virtual void ascend()=0;
+};
+template<class K,class E>
+class binary_search_tree:public bs_tree<k,E>
+                         public chain_binarytree<std::pair<const K,E>>
+{
+    public:
+        bool empty()const;
+        int length()const;
+        std::pair<const K,E> find(const K &the_key)const;
+        void insert(std::pair<const K,E> &the_pair);
+
+        void ascend();
+}
 #include"template_lib.inl"
 #endif
