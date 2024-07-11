@@ -591,5 +591,5 @@ class binary_search_tree:public bs_tree<K,E>,
 
         void ascend();
 };*/
-#include"template_lib.inl"
+#include"template_lib.cpp"
 #endif

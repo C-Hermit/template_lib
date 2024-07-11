@@ -1,6 +1,7 @@
-#ifndef _TEMPLATE_LIB_INL_
-#define _TEMPLATE_LIB_INL_
+#ifndef _TEMPLATE_LIB_CPP_
+#define _TEMPLATE_LIB_CPP_
 
+#include"template_lib.h"
 /* -------------------------------------------------------------------------- */
 /*                                 linearlist                                 */
 /* -------------------------------------------------------------------------- */
