@@ -1,4 +1,3 @@
-#include<iostream>
 #include"template_lib.h"
 int main(void)
 {

@@ -1,6 +1,7 @@
-#ifndef _STL_LIB_H_
-#define _STL_LIB_H_
+#ifndef _TEMPLATE_LIB_H_
+#define _TEMPLATE_LIB_H_
 
+#include<math.h>
 #include<iostream>
 #include<iterator>
 #include<algorithm>
@@ -258,7 +259,7 @@ class array_dictionary:public dictionary<K,E>
         void erase(const K &the_key);
         void output(std::ostream &out)const;
     protected:
-        std::pair<K, E> *dictionary;
+        std::pair<K, E> *m_dictionary;
         int dictionary_length;
         int dictionary_size;
 };
@@ -572,14 +573,14 @@ class maxloser_competitivetree:public competitivetree<T>
         void play(int match_node,int left_child,int right_child);
 };
 /* --------------------------------- binary_search_tree --------------------------------- */
-template<class k,class E>
-class bs_tree:pubilc dictionary<k,E>
+/*template<class K,class E>
+class bs_tree:pubilc dictionary<K,E>
 {
     public:
         virtual void ascend()=0;
 };
 template<class K,class E>
-class binary_search_tree:public bs_tree<k,E>
+class binary_search_tree:public bs_tree<K,E>,
                          public chain_binarytree<std::pair<const K,E>>
 {
     public:
@@ -589,6 +590,6 @@ class binary_search_tree:public bs_tree<k,E>
         void insert(std::pair<const K,E> &the_pair);
 
         void ascend();
-}
+};*/
 #include"template_lib.inl"
 #endif
