@@ -843,12 +843,12 @@ array_dictionary<K,E>::array_dictionary(const int initial_capacity)
 {
     if (initial_capacity<1)
         throw std::runtime_error("initial_capacity is invalid");
-    m_dictionary=new std::pair< K,E>[initial_capacity];
+    dictionary=new std::pair< K,E>[initial_capacity];
     dictionary_size=initial_capacity;
     dictionary_length=0;
 };
 template<class K,class E>
-array_dictionary<K,E>::~array_dictionary(){delete[] m_dictionary;};
+array_dictionary<K,E>::~array_dictionary(){delete[] dictionary;};
 template<class K,class E>
 bool array_dictionary<K,E>::empty()const{return dictionary_length==0;};
 template<class K,class E>
@@ -858,8 +858,8 @@ std::pair<const K,E> *array_dictionary<K,E>::find(const K &the_key)const
 {
     for (int i = 0; i < dictionary_length; i++)
     {
-        if (m_dictionary[i].first==the_key)
-            return (std::pair<const K,E> *)m_dictionary+i;
+        if (dictionary[i].first==the_key)
+            return (std::pair<const K,E> *)dictionary+i;
     }
     return 0;
 };
@@ -867,24 +867,24 @@ template<class K,class E>
 void array_dictionary<K,E>::insert(const  std::pair<const K,E> &the_keypair)
 {
     int i=0;
-    while ( i < dictionary_length&&the_keypair.first>m_dictionary[i].first)
+    while ( i < dictionary_length&&the_keypair.first>dictionary[i].first)
         i++;
-    if (i < dictionary_length&&the_keypair.first==m_dictionary[i].first)
+    if (i < dictionary_length&&the_keypair.first==dictionary[i].first)
     {
-        m_dictionary[i].second=the_keypair.second;
+        dictionary[i].second=the_keypair.second;
         return;
     }
     if (dictionary_length==dictionary_size)
     {
         dictionary_size*=2;
         std::pair<K,E> *temp=new std::pair<K,E>[dictionary_size];
-        std::copy(m_dictionary,m_dictionary+dictionary_size,temp);
-        delete m_dictionary;
-        m_dictionary=temp;
+        std::copy(dictionary,dictionary+dictionary_size,temp);
+        delete dictionary;
+        dictionary=temp;
     }
     if (i!=dictionary_length)
-        std::copy(m_dictionary+i,m_dictionary+dictionary_size,m_dictionary+i+1);
-    *(m_dictionary+i)=the_keypair;
+        std::copy(dictionary+i,dictionary+dictionary_size,dictionary+i+1);
+    *(dictionary+i)=the_keypair;
     dictionary_length++;
 };
 template<class K,class E>
@@ -892,9 +892,9 @@ void array_dictionary<K,E>::erase(const K &the_key)
 {
     for (int i = 0; i < dictionary_length; i++)
     {
-        if (m_dictionary[i].first==the_key)
+        if (dictionary[i].first==the_key)
         {
-            std::copy(m_dictionary+i+1,m_dictionary+dictionary_length,m_dictionary+1);
+            std::copy(dictionary+i+1,dictionary+dictionary_length,dictionary+1);
             dictionary_length--;
             return;
         }
@@ -904,7 +904,7 @@ template<class K,class E>
 void array_dictionary<K,E>::output(std::ostream &out)const
 {
     for (int i = 0; i < dictionary_length; i++)
-        out<<m_dictionary[i].first<<""<<m_dictionary[i].second<<"";
+        out<<dictionary[i].first<<""<<dictionary[i].second<<"";
 };
 template<class K,class E>
 std::ostream &operator<<(std::ostream &out,const array_dictionary<K,E> &x){x.output(out);return out;};
@@ -2077,6 +2077,13 @@ void maxloser_competitivetree<T>::output()const
 /* -------------------------------------------------------------------------- */
 /*                             binary_search_tree                             */
 /* -------------------------------------------------------------------------- */
-/*template<class K,class E>
-bool binary_search_tree<K,E>::empty()const{};*/
+template<class K,class E>
+bool binary_search_tree<K,E>::empty()const{return chain_binarytree<std::pair<const K,E>>::binarytree_length==0;};
+template<class K,class E>
+int binary_search_tree<K,E>::length()const{return chain_binarytree<std::pair<const K,E>>::binarytree_length;};
+template<class K,class E>
+std::pair<const K,E> binary_search_tree<K,E>::find(const K &the_key)const
+{
+    
+};
 #endif

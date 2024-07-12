@@ -259,7 +259,7 @@ class array_dictionary:public dictionary<K,E>
         void erase(const K &the_key);
         void output(std::ostream &out)const;
     protected:
-        std::pair<K, E> *m_dictionary;
+        std::pair<K, E> *dictionary;
         int dictionary_length;
         int dictionary_size;
 };
@@ -573,8 +573,8 @@ class maxloser_competitivetree:public competitivetree<T>
         void play(int match_node,int left_child,int right_child);
 };
 /* --------------------------------- binary_search_tree --------------------------------- */
-/*template<class K,class E>
-class bs_tree:pubilc dictionary<K,E>
+template<class K,class E>
+class bs_tree:public dictionary<K,E>
 {
     public:
         virtual void ascend()=0;
@@ -590,6 +590,6 @@ class binary_search_tree:public bs_tree<K,E>,
         void insert(std::pair<const K,E> &the_pair);
 
         void ascend();
-};*/
+};
 #include"template_lib.cpp"
 #endif
