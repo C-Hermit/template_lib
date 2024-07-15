@@ -2082,8 +2082,27 @@ bool binary_search_tree<K,E>::empty()const{return chain_binarytree<std::pair<con
 template<class K,class E>
 int binary_search_tree<K,E>::length()const{return chain_binarytree<std::pair<const K,E>>::binarytree_length;};
 template<class K,class E>
-std::pair<const K,E> binary_search_tree<K,E>::find(const K &the_key)const
+std::pair<const K,E> *binary_search_tree<K,E>::find(const K &the_key)const
 {
+    binarytree_node<std::pair<const K,E>> *p=root;
+    while (p!=NULL)
+    {
+        if (the_key<p->element.first)
+        {
+            p=p->left_child;
+        }
+        else if (the_key>p->element.first)
+        {
+            p=p->right_child;
+        }
+        else return &p->element;
+    }
+    return NULL;
     
+};
+template<class K,class E>
+void binary_search_tree<K,E>::insert(std::pair<const K,E> &the_pair)
+{
+
 };
 #endif
