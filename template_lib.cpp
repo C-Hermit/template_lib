@@ -2084,7 +2084,7 @@ int binary_search_tree<K,E>::length()const{return chain_binarytree<std::pair<con
 template<class K,class E>
 std::pair<const K,E> *binary_search_tree<K,E>::find(const K &the_key)const
 {
-    binarytree_node<std::pair<const K,E>> *p=root;
+    binarytree_node<std::pair<const K,E>> *p=chain_binarytree<std::pair<const K,E>>::root;
     while (p!=NULL)
     {
         if (the_key<p->element.first)
@@ -2101,8 +2101,52 @@ std::pair<const K,E> *binary_search_tree<K,E>::find(const K &the_key)const
     
 };
 template<class K,class E>
-void binary_search_tree<K,E>::insert(std::pair<const K,E> &the_pair)
+void binary_search_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
+{
+    binarytree_node<std::pair<const K,E>> *p=chain_binarytree<std::pair<const K,E>>::root,
+                                          *previous_p=NULL;
+    //check p->element
+    while (p!=NULL)
+    {
+        previous_p=p;
+        if (p->element.first<the_pair.first)
+        {
+            p=p->left_child;
+        }
+        else if (p->element.first>the_pair.first)
+        {
+            p=p->right_child;
+        }
+        else
+        {
+            p->element.second=the_pair.second;
+            return;
+        }
+    }
+    //create a new node for the_pair
+    binarytree_node<std::pair<const K,E>> *new_node
+        =new binarytree_node<std::pair<const K,E>>(the_pair);
+    //new_node link to previous_p
+    if (chain_binarytree<std::pair<const K,E>>::root!=NULL)
+    {
+        if(previous_p->element.first<the_pair.first)
+        {
+            previous_p->left_child=new_node;
+        }   
+        else if (previous_p->element.first>the_pair.first)
+        {
+            previous_p->right_child=new_node;
+        }
+    }
+    else chain_binarytree<std::pair<const K,E>>::root;
+
+    chain_binarytree<std::pair<const K,E>>::binarytree_length++;
+};
+template<class K,class E>
+void binary_search_tree<K,E>::erase(const K &the_key)
 {
 
 };
+template<class K,class E>
+void binary_search_tree<K,E>::ascend(){chain_binarytree<std::pair<const K,E>>::in_order_output();}; 
 #endif
