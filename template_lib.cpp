@@ -2173,9 +2173,9 @@ void binary_search_tree<K,E>::erase(const K &the_key)
             s=s->right_child;
         }
         //q->element = s->element
-        binarytree_node<std::pair<const K,E> *q=
-            new binarytree_node<std::pair<const K,E>>(s->element,p->left_child,p->right_child);
-        if (previous_p==NULL)root=q;   
+        binarytree_node<std::pair<const K,E>> *q=new binarytree_node<std::pair<const K,E>>(s->element,p->left_child,p->right_child);
+        if (previous_p==NULL)
+            chain_binarytree<std::pair<const K,E>>::root=q;   
         else 
         {
             if (p==previous_p->left_child)
@@ -2190,6 +2190,27 @@ void binary_search_tree<K,E>::erase(const K &the_key)
         p=s;
     }
     //if p have at most one no-zero subtree
+    binarytree_node<std::pair<const K,E>> *c;
+    if (p->left_child!=NULL)
+    {
+        c=p->left_child;
+    }
+    else 
+        c=p->right_child;
+    if (p==chain_binarytree<std::pair<const K,E>>::root)
+    {
+        chain_binarytree<std::pair<const K,E>>::root=c;
+    }
+    else
+    {
+        if (p==previous_p->left_child)
+        {
+            previous_p->right_child=c;
+        }
+        else previous_p->right_child=c;
+    }
+    delete p;
+    chain_binarytree<std::pair<const K,E>>::binary_length--;
 };
 template<class K,class E>
 void binary_search_tree<K,E>::ascend(){chain_binarytree<std::pair<const K,E>>::in_order_output();}; 
