@@ -2,6 +2,13 @@
 #define _TEMPLATE_LIB_CPP_
 
 #include"template_lib.h"
+
+template<class K,class E>
+std::ostream &operator<<(std::ostream &stream,std::pair<const K,E> &other)
+{
+    stream<<other.first<<' '<<other.second;
+    return stream;
+}
 /* -------------------------------------------------------------------------- */
 /*                                 linearlist                                 */
 /* -------------------------------------------------------------------------- */
@@ -1129,6 +1136,7 @@ void skiplist_dictionary<K,E>::output(std::ostream &out)const
 };
 template<class K,class E>
 std::ostream &operator<<(std::ostream &out,const skiplist_dictionary<K,E> &x){x.output(out);return out;};
+/* -------------------------- hashtable_dictionary -------------------------- */
 template<class K,class E>
 hashtable_dictionary<K,E>::hashtable_dictionary(int the_divisor)
 {
@@ -1575,7 +1583,7 @@ void chain_binarytree<T>::add_to_nodes(binarytree_node<T> *t){count++;};
 template<class T>
 void chain_binarytree<T>::dispose(binarytree_node<T> *t){delete t;};
 template<class T>
-void chain_binarytree<T>::output(binarytree_node<T> *t){std::cout<<t->element<<' ';};
+void chain_binarytree<T>::output(binarytree_node<T> *t){std::cout<< t->element<<' ';};
 template<class T>
 int chain_binarytree<T>::height(binarytree_node<T> *t) 
 {
@@ -2138,7 +2146,7 @@ void binary_search_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
             previous_p->right_child=new_node;
         }
     }
-    else chain_binarytree<std::pair<const K,E>>::root;
+    else chain_binarytree<std::pair<const K,E>>::root=new_node;
 
     chain_binarytree<std::pair<const K,E>>::binarytree_length++;
 };
@@ -2210,8 +2218,11 @@ void binary_search_tree<K,E>::erase(const K &the_key)
         else previous_p->right_child=c;
     }
     delete p;
-    chain_binarytree<std::pair<const K,E>>::binary_length--;
+    chain_binarytree<std::pair<const K,E>>::binarytree_length--;
 };
 template<class K,class E>
-void binary_search_tree<K,E>::ascend(){chain_binarytree<std::pair<const K,E>>::in_order_output();}; 
+void binary_search_tree<K,E>::ascend()
+{
+    chain_binarytree<std::pair<const K,E>>::in_order_output();
+};
 #endif

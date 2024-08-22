@@ -588,9 +588,9 @@ class binary_search_tree:public bs_tree<K,E>,
         int length()const;
         std::pair<const K,E> *find(const K &the_key)const;
         void insert(const std::pair<const K,E> &the_pair);
-        void erase(const K& the_key);
-
+        void erase(const K &the_key);
         void ascend();
+        void output(binarytree_node<std::pair<const K,E>> *t);
 };
 #include"template_lib.cpp"
 #endif
