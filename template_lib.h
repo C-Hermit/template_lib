@@ -592,5 +592,13 @@ class binary_search_tree:public bs_tree<K,E>,
         void ascend();
         void output(binarytree_node<std::pair<const K,E>> *t);
 };
+/* ------------------------------- indexed_bstree ------------------------------ */
+template<class K,class E>
+class indexed_bstree:public bs_tree<K,E>
+{
+    public:
+        virtual std::pair<const K,E> *get(const int the_key)const=0;
+        virtual void delete(const int the_key)=0
+}
 #include"template_lib.cpp"
 #endif
