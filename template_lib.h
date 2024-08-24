@@ -598,7 +598,7 @@ class indexed_bstree:public bs_tree<K,E>
 {
     public:
         virtual std::pair<const K,E> *get(const int the_key)const=0;
-        virtual void delete(const int the_key)=0
-}
+        virtual void erase(const int the_key)=0;
+};
 #include"template_lib.cpp"
 #endif
