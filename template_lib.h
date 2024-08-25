@@ -614,6 +614,9 @@ class indexed_binary_search_tree:public indexed_bstree<K,E>
         void insert(std::pair<const K,E>);
         void erase(const K &the_key);
         void ascend();
+    protected:
+        indexed_bstree_node<std::pair<const K,E>> *root;
+        int binarytree_length;
 };
 #include"template_lib.cpp"
 #endif
