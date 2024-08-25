@@ -599,6 +599,12 @@ class indexed_bstree:public bs_tree<K,E>
         virtual std::pair<const K,E> *get(const int the_index)const=0;
         virtual void erase(const int the_key)=0;
 };
+template<class T>
+class indexed_bstree_node:public binarytree_node<T>
+{
+    public:
+        int left_sise;
+};
 template<class K,class E>
 class indexed_binary_search_tree:public indexed_bstree<K,E>
 {
