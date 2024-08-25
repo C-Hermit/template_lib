@@ -590,15 +590,24 @@ class binary_search_tree:public bs_tree<K,E>,
         void insert(const std::pair<const K,E> &the_pair);
         void erase(const K &the_key);
         void ascend();
-        void output(binarytree_node<std::pair<const K,E>> *t);
 };
 /* ------------------------------- indexed_bstree ------------------------------ */
 template<class K,class E>
 class indexed_bstree:public bs_tree<K,E>
 {
     public:
-        virtual std::pair<const K,E> *get(const int the_key)const=0;
+        virtual std::pair<const K,E> *get(const int the_index)const=0;
         virtual void erase(const int the_key)=0;
+};
+template<class K,class E>
+class indexed_binary_search_tree:public indexed_bstree<K,E>
+{
+    public:
+        std::pair<const K,E> *find(const K &the_key)const;
+        std::pair<const K,E> *get(const int the_index)const;
+        void insert(std::pair<const K,E>);
+        void erase(const K &the_key);
+        void ascend();
 };
 #include"template_lib.cpp"
 #endif
