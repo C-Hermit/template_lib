@@ -2225,4 +2225,25 @@ void binary_search_tree<K,E>::ascend()
 {
     chain_binarytree<std::pair<const K,E>>::in_order_output();
 };
+/* -------------------------------------------------------------------------- */
+/*                         indexed_binary_search_tree                         */
+/* -------------------------------------------------------------------------- */
+template<class K,class E>
+std::pair<const K,E> *indexed_binary_search_tree<K,E>::find(const K &the_key)const
+{
+    indexed_bstree_node<std::pair<const K,E>> *p=root;
+    while(p!=NULL)
+    {
+        if (the_key>p->element)
+        {
+            p=p->left_child
+        }
+        else if (the_key<p->element)
+        {
+            p=p->right_child;
+        }
+        else return &p->element;
+    }
+    return NULL;
+};
 #endif
