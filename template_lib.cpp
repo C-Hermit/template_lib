@@ -2139,11 +2139,11 @@ void binary_search_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
     {
         if(previous_p->element.first<the_pair.first)
         {
-            previous_p->left_child=new_node;
+            previous_p->right_child=new_node;
         }   
         else if (previous_p->element.first>the_pair.first)
         {
-            previous_p->right_child=new_node;
+            previous_p->left_child=new_node;
         }
     }
     else chain_binarytree<std::pair<const K,E>>::root=new_node;
@@ -2155,7 +2155,7 @@ void binary_search_tree<K,E>::erase(const K &the_key)
 {
     binarytree_node<std::pair<const K,E>> *p=chain_binarytree<std::pair<const K,E>>::root,
                                           *previous_p=NULL;
-    //find the erasr node
+    //find the node to erase
     while (p!=NULL&&p->element.first!=the_key)
     {
         previous_p=p;
@@ -2247,11 +2247,11 @@ std::pair<const K,E> *indexed_binary_search_tree<K,E>::find(const K &the_key)con
     {
         if (the_key>p->element)
         {
-            p=p->left_child;
+            p=p->right_child;
         }
         else if (the_key<p->element)
         {
-            p=p->right_child;
+            p=p->left_child;
         }
         else return &p->element;
     }
@@ -2315,11 +2315,11 @@ void indexed_binary_search_tree<K,E>::insert(std::pair<const K,E> &the_pair)
     {
         if (the_pair.first>previous_p->element.first)
         {
-            previous_p->left_child=new_node;
+            previous_p->right_child=new_node;
         }
         else if(the_pair.first<previous_p->element.first)
         {
-            previous_p->right_child=new_node;
+            previous_p->left_child=new_node;
         }
     }
     else
@@ -2328,5 +2328,86 @@ void indexed_binary_search_tree<K,E>::insert(std::pair<const K,E> &the_pair)
         root->left_sise=0;
     } 
     binarytree_length++;
+};
+template<class K,class E>
+void indexed_binary_search_tree<K,E>::erase(const K &the_key)
+{
+    indexed_bstree_node<std::pair<const K,E>> *p=root,
+                                              *previous_p=NULL;
+    //find the node to erase
+    while (p!=NULL&&p->element.first!=the_key)
+    {
+        previous_p=p;
+        if (the_key>p->element.first)
+        {
+            p=p->right_child;
+        }
+        else p=p->left_child;
+    }
+    if (p==NULL)return;
+    //reorganize the tree structure
+    //if p have two no-zero subtree
+    if (p->left_child!=NULL&&p->right_child!=NULL)
+    {
+        indexed_bstree_node<std::pair<const K,E>> *s=p->left_child,
+                                                  *previous_s=p;
+        //find the maxnum node in left_child of p;
+        while (s->right_child!=NULL)
+        {
+            previous_s=s;
+            s=s->right_child;
+        }
+        //p and s swap place
+        indexed_bstree_node<std::pair<const K,E>> *q
+            =new indexed_bstree_node(s->element,p->left_child,p->right_child);
+        //if erase root node
+        if (previous_p==NULL)
+        {
+            root=q;
+        }
+        else
+        {
+            if (previous_p->left_child==p)
+            {
+                previous_p->left_child=q;
+            }
+            else
+            {
+                previous_p->right_child=q;
+            }
+        }
+        //p move to maxnum node s
+        if (previous_s=p)previous_s=q;
+        else previous_p=previous_s;
+        delete p;
+        p=s;
+    }
+    //if p have at most one no-zero subtree
+    indexed_bstree_node<std::pair<const K,E>> *nozero_child;
+    if (p->left_child!=NULL)
+    {
+        nozero_child=p->left_child;
+    }
+    else
+    {
+        nozero_child=p->right_child;
+    }
+    if (p==root)
+    {
+        root=nozero_child;
+    }
+    else
+    {
+        if (previous_p->left_child=p)
+        {
+            previous_p->left_child=nozero_child;
+        }
+        else
+        {
+            previous_p->right_child=nozero_child;
+        }
+    }
+    delete p;
+    binarytree_length--;
 };
 #endif
