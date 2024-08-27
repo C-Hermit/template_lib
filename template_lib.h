@@ -609,9 +609,11 @@ template<class K,class E>
 class indexed_binary_search_tree:public indexed_bstree<K,E>
 {
     public:
+        indexed_binary_search_tree();
+        ~indexed_binary_search_tree();
         std::pair<const K,E> *find(const K &the_key)const;
         std::pair<const K,E> *get(const int the_index)const;
-        void insert(std::pair<const K,E>);
+        void insert(std::pair<const K,E> &the_pair);
         void erase(const K &the_key);
         void ascend();
     protected:

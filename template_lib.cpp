@@ -2229,6 +2229,17 @@ void binary_search_tree<K,E>::ascend()
 /*                         indexed_binary_search_tree                         */
 /* -------------------------------------------------------------------------- */
 template<class K,class E>
+indexed_binary_search_tree<K,E>::indexed_binary_search_tree()
+{
+    root=NULL;
+    binarytree_length=0;
+};
+template<class K,class E>
+indexed_binary_search_tree<K,E>::~indexed_binary_search_tree()
+{
+    delete root;
+};
+template<class K,class E>
 std::pair<const K,E> *indexed_binary_search_tree<K,E>::find(const K &the_key)const
 {
     indexed_bstree_node<std::pair<const K,E>> *p=root;
@@ -2272,5 +2283,50 @@ std::pair<const K,E> *indexed_binary_search_tree<K,E>::get(const int the_index)c
         else return &p->element;
     }
     return NULL;
+};
+template<class K,class E>
+void indexed_binary_search_tree<K,E>::insert(std::pair<const K,E> &the_pair)
+{
+    indexed_bstree_node<std::pair<const K,E>> *p=root,
+                                              *previous_p=NULL;
+    //chack p->element
+    while (p!=NULL)
+    {
+        previous_p=p;
+        if (p->element.first>the_pair.first)
+        {
+            p->left_sise++;
+            p=p->left_child;
+        }
+        else if(p->element.first<the_pair.first)
+        {
+            p=p->right_child;
+        }
+        else
+        {
+          p->element.second=the_pair.second;
+          return;  
+        }
+    }
+    //
+    indexed_bstree_node<std::pair<const K,E>> *new_node
+        =new indexed_bstree_node<std::pair<const K,E>>(the_pair);
+    if (root!=NULL)
+    {
+        if (the_pair.first>previous_p->element.first)
+        {
+            previous_p->left_child=new_node;
+        }
+        else if(the_pair.first<previous_p->element.first)
+        {
+            previous_p->right_child=new_node;
+        }
+    }
+    else
+    {
+        root=new_node;
+        root->left_sise=0;
+    } 
+    binarytree_length++;
 };
 #endif
