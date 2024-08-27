@@ -2236,11 +2236,38 @@ std::pair<const K,E> *indexed_binary_search_tree<K,E>::find(const K &the_key)con
     {
         if (the_key>p->element)
         {
-            p=p->left_child
+            p=p->left_child;
         }
         else if (the_key<p->element)
         {
             p=p->right_child;
+        }
+        else return &p->element;
+    }
+    return NULL;
+};
+template<class K,class E>
+std::pair<const K,E> *indexed_binary_search_tree<K,E>::get(const int the_index)const
+{
+    //chack the_index
+    if (the_index>binarytree_length-1)
+    {
+        throw std::runtime_error("the_index is invaild");
+    }
+    //get the element of the_index
+    indexed_bstree_node<std::pair<const K,E>> *p=root;
+    int i=the_index;
+    while (p!=NULL)
+    {
+        if (i<p->left_sise+1)
+        {
+            p=p->left_child;
+            i--;
+        }
+        else if (i>p->left_sise+1)
+        {
+            p=p->right_child;
+            i-=p->left_sise+1;
         }
         else return &p->element;
     }
