@@ -2245,11 +2245,11 @@ std::pair<const K,E> *indexed_binary_search_tree<K,E>::find(const K &the_key)con
     indexed_bstree_node<std::pair<const K,E>> *p=root;
     while(p!=NULL)
     {
-        if (the_key>p->element)
+        if (the_key>p->element.first)
         {
             p=p->right_child;
         }
-        else if (the_key<p->element)
+        else if (the_key<p->element.first)
         {
             p=p->left_child;
         }
@@ -2285,7 +2285,7 @@ std::pair<const K,E> *indexed_binary_search_tree<K,E>::get(const int the_index)c
     return NULL;
 };
 template<class K,class E>
-void indexed_binary_search_tree<K,E>::insert(std::pair<const K,E> &the_pair)
+void indexed_binary_search_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
 {
     indexed_bstree_node<std::pair<const K,E>> *p=root,
                                               *previous_p=NULL;
@@ -2409,5 +2409,21 @@ void indexed_binary_search_tree<K,E>::erase(const K &the_key)
     }
     delete p;
     binarytree_length--;
+};
+template<class K,class E>
+void indexed_binary_search_tree<K,E>::ascend()
+{
+    in_order(root);
+};
+template<class K,class E>
+void indexed_binary_search_tree<K,E>::in_order(indexed_bstree_node<std::pair<const K,E>> *t)
+{
+    if (t!=NULL)
+    {
+        in_order(t->left_child);
+        std::cout<<t<<std::endl;
+        in_order(t->right_child);
+    }
+    
 };
 #endif

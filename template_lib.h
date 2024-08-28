@@ -600,10 +600,24 @@ class indexed_bstree:public bs_tree<K,E>
         virtual void erase(const int the_key)=0;
 };
 template<class T>
-class indexed_bstree_node:public binarytree_node<T>
+class indexed_bstree_node
 {
     public:
+        T element;
+        indexed_bstree_node *left_child;
+        indexed_bstree_node *right_child;
         int left_sise;
+        indexed_bstree_node(){left_child=right_child=NULL;}
+        indexed_bstree_node(const T &the_element):element(the_element)
+        {
+            left_child=right_child=NULL;
+        }
+        indexed_bstree_node(const T &the_element,indexed_bstree_node<T> *the_left_child,indexed_bstree_node<T> *the_right_child)
+            :element(the_element)
+        {
+            left_child=the_left_child;
+            right_child=the_right_child;
+        }
 };
 template<class K,class E>
 class indexed_binary_search_tree:public indexed_bstree<K,E>
@@ -611,11 +625,15 @@ class indexed_binary_search_tree:public indexed_bstree<K,E>
     public:
         indexed_binary_search_tree();
         ~indexed_binary_search_tree();
+        bool empty()const;
+        int length()const;
         std::pair<const K,E> *find(const K &the_key)const;
         std::pair<const K,E> *get(const int the_index)const;
-        void insert(std::pair<const K,E> &the_pair);
+        void insert(const std::pair<const K,E> &the_pair);
         void erase(const K &the_key);
+        void erase(const int the_index);
         void ascend();
+        void in_order(indexed_bstree_node<std::pair<const K,E>> *t);
     protected:
         indexed_bstree_node<std::pair<const K,E>> *root;
         int binarytree_length;
