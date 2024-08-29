@@ -2240,6 +2240,10 @@ indexed_binary_search_tree<K,E>::~indexed_binary_search_tree()
     delete root;
 };
 template<class K,class E>
+bool indexed_binary_search_tree<K,E>::empty()const{return binarytree_length==0;};
+template<class K,class E>
+int indexed_binary_search_tree<K,E>::length()const{return binarytree_length;};
+template<class K,class E>
 std::pair<const K,E> *indexed_binary_search_tree<K,E>::find(const K &the_key)const
 {
     indexed_bstree_node<std::pair<const K,E>> *p=root;
@@ -2409,6 +2413,11 @@ void indexed_binary_search_tree<K,E>::erase(const K &the_key)
     }
     delete p;
     binarytree_length--;
+};
+template<class K,class E>
+void indexed_binary_search_tree<K,E>::erase(const int the_index)
+{
+
 };
 template<class K,class E>
 void indexed_binary_search_tree<K,E>::ascend()
