@@ -2264,11 +2264,6 @@ std::pair<const K,E> *indexed_binary_search_tree<K,E>::find(const K &the_key)con
 template<class K,class E>
 std::pair<const K,E> *indexed_binary_search_tree<K,E>::get(const int the_index)const
 {
-    //chack the_index
-    if (the_index>binarytree_length-1)
-    {
-        throw std::runtime_error("the_index is invaild");
-    }
     //get the element of the_index
     indexed_bstree_node<std::pair<const K,E>> *p=root;
     int i=the_index;
@@ -2417,7 +2412,75 @@ void indexed_binary_search_tree<K,E>::erase(const K &the_key)
 template<class K,class E>
 void indexed_binary_search_tree<K,E>::erase(const int the_index)
 {
-
+    int i=the_index;
+    indexed_bstree_node<std::pair<const K,E>> *p=root,
+                                              *previous_p=NULL;
+    while (p!=NULL)
+    {
+        previous_p=p;
+        if (i>p->left_sise+1)
+        {
+            i-=p->left_sise+1;
+            p=p->right_child;
+        }
+        else if (i<p->left_sise+1)
+        {
+            i--;
+            p=p->left_child;
+        }
+        else break;
+    }
+    if (p==NULL)return;
+    if (p->left_child!=NULL&&p->right_child!=NULL)
+    {
+        indexed_bstree_node<std::pair<const K,E>> *s=p->left_child,
+                                                  *previous_s=p;
+        while (s->right_child!=NULL)
+        {
+            previous_s=s;
+            s=s->right_child;
+        }
+        indexed_bstree_node<std::pair<const K,E>> *q=
+            new indexed_bstree_node<std::pair<const K,E>>(s->element,p->left_child,p->right_child);
+        if (previous_p->left_child==p)
+        {
+            previous_p->left_child=q;
+        }
+        else
+        {
+            previous_p->right_child=q;
+        }
+        if (previous_s=p)previous_p=q;
+        else previous_p=previous_s;
+        delete p;
+        p=s;
+    }
+    indexed_bstree_node<std::pair<const K,E>> *nozero_child;
+    if (p->left_child!=NULL)
+    {
+        nozero_child=p->left_child;
+    }
+    else if (p->right_child!=NULL)
+    {
+        nozero_child=p->right_child;
+    }
+    if (p==root)
+    {
+        root=nozero_child;
+    }
+    else
+    {
+        if (previous_p->left_child==p)
+        {
+            previous_p->left_child=nozero_child;
+        }
+        else if (previous_p->right_child==p)
+        {
+            previous_p->right_child=nozero_child;
+        }
+    }
+    delete p;
+    binarytree_length--;
 };
 template<class K,class E>
 void indexed_binary_search_tree<K,E>::ascend()
