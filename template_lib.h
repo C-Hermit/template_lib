@@ -642,6 +642,26 @@ class indexed_binary_search_tree:public indexed_bstree<K,E>
 /*                            balanced_search_tree                            */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------- avl_tree -------------------------------- */
+template<class T>
+class avl_tree_node
+{
+    public:
+        T element;
+        avl_tree_node *left_node;
+        avl_tree_node *right_node;
+        int bf;
+        avl_tree_node(){left_node=right_node=NULL;}
+        avl_tree_node(const T &the_element):element(the_element)
+        {
+            left_node=right_node=NULL;
+        }
+        avl_tree_node(const T &the_element,avl_tree_node<T> *the_left_node,avl_tree_node *the_right_node)
+        :element(the_element)
+        {
+            left_node=the_left_node;
+            right_node=the_right_node;
+        }
+};
 template<class K,class E>
 class avl_tree:public indexed_bstree<K,E>
 {
