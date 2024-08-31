@@ -638,5 +638,28 @@ class indexed_binary_search_tree:public indexed_bstree<K,E>
         indexed_bstree_node<std::pair<const K,E>> *root;
         int binarytree_length;
 };
+/* -------------------------------------------------------------------------- */
+/*                            balanced_search_tree                            */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------- avl_tree -------------------------------- */
+template<class K,class E>
+class avl_tree:public indexed_bstree<K,E>
+{
+    public:
+        avl_tree();
+        ~avl_tree();
+        bool empty()const;
+        int length()const;
+        std::pair<const K,E> *find(const K &the_key)const;
+        std::pair<const K,E> *get(const int the_index)const;
+        void insert(const std::pair<const K,E> &the_pair);
+        void erase(const K &the_key);
+        void erase(const int the_index);
+        void ascend();
+        void in_order(avl_tree_node<std::pair<const K,E>> *t);
+    protected:
+        avl_tree_node<std::pair<const K,E>> *root;
+        int binarytree_length;
+};
 #include"template_lib.cpp"
 #endif
