@@ -2498,4 +2498,16 @@ void indexed_binary_search_tree<K,E>::in_order(indexed_bstree_node<std::pair<con
     }
     
 };
+/* -------------------------------- avl_tree -------------------------------- */
+template<class K,class E>
+avl_tree<K,E>::avl_tree()
+{
+    root=NULL;
+    binarytree_length=0;
+}
+template<class K,class E>
+avl_tree<K,E>::~avl_tree()
+{
+    delete root;
+}
 #endif
