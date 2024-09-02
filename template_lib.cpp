@@ -2510,4 +2510,8 @@ avl_tree<K,E>::~avl_tree()
 {
     delete root;
 }
+template<class K,class E>
+bool avl_tree<K,E>::empty()const{return binarytree_length==0;};
+template<class K,class E>
+int avl_tree<K,E>::length()const{return binarytree_length;};
 #endif
