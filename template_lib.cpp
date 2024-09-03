@@ -2517,6 +2517,19 @@ int indexed_avl_tree<K,E>::length()const{return binarytree_length;};
 template<class K,class E>
 std::pair<const K,E> *indexed_avl_tree<K,E>::find(const K &the_key)const
 {
-
+    indexed_avl_tree_node<std::pair<const K,E>> *p=root;
+    while (p!=NULL)
+    {
+        if (the_key>p->element.first)
+        {
+            p=p->right_node;
+        }
+        else if(the_key<p->element.first)
+        {
+            p=p->left_node;
+        }
+        else return &p->element;
+    }
+    return NULL;
 };
 #endif
