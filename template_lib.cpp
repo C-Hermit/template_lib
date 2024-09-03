@@ -2500,18 +2500,23 @@ void indexed_binary_search_tree<K,E>::in_order(indexed_bstree_node<std::pair<con
 };
 /* -------------------------------- avl_tree -------------------------------- */
 template<class K,class E>
-avl_tree<K,E>::avl_tree()
+indexed_avl_tree<K,E>::indexed_avl_tree()
 {
     root=NULL;
     binarytree_length=0;
 }
 template<class K,class E>
-avl_tree<K,E>::~avl_tree()
+indexed_avl_tree<K,E>::~indexed_avl_tree()
 {
     delete root;
 }
 template<class K,class E>
-bool avl_tree<K,E>::empty()const{return binarytree_length==0;};
+bool indexed_avl_tree<K,E>::empty()const{return binarytree_length==0;};
 template<class K,class E>
-int avl_tree<K,E>::length()const{return binarytree_length;};
+int indexed_avl_tree<K,E>::length()const{return binarytree_length;};
+template<class K,class E>
+std::pair<const K,E> *indexed_avl_tree<K,E>::find(const K &the_key)const
+{
+
+};
 #endif

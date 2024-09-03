@@ -663,11 +663,11 @@ class avl_tree_node
         }
 };
 template<class K,class E>
-class avl_tree:public indexed_bstree<K,E>
+class indexed_avl_tree:public indexed_bstree<K,E>
 {
     public:
-        avl_tree();
-        ~avl_tree();
+        indexed_avl_tree();
+        ~indexed_avl_tree();
         bool empty()const;
         int length()const;
         std::pair<const K,E> *find(const K &the_key)const;
