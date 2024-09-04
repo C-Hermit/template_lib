@@ -2532,4 +2532,25 @@ std::pair<const K,E> *indexed_avl_tree<K,E>::find(const K &the_key)const
     }
     return NULL;
 };
+template<class K,class E>
+std::pair<const K,E> *indexed_avl_tree<K,E>::get(const int the_index)const
+{
+    indexed_avl_tree_node<std::pair<const K,E>> *p=root;
+    int i=the_index;
+    while (p!=NULL)
+    {
+        if (i<p->left_size+1)
+        {
+            p=p->left_node;
+            i--;
+        }
+        else if(i>p->left_size+1)
+        {
+            p=p->right_node;
+            i-=p->left_size+1;
+        }
+        else return &p->element;
+    }
+    return NULL;
+};
 #endif
