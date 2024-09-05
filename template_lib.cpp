@@ -2553,4 +2553,9 @@ std::pair<const K,E> *indexed_avl_tree<K,E>::get(const int the_index)const
     }
     return NULL;
 };
+template<class K,class E>
+void indexed_avl_tree<K,E>::ascend()
+{
+    in_order(root);
+};
 #endif
