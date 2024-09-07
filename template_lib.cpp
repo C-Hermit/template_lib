@@ -2558,4 +2558,15 @@ void indexed_avl_tree<K,E>::ascend()
 {
     in_order(root);
 };
+template<class K,class E>
+void indexed_avl_tree<K,E>::in_order(indexed_avl_tree_node<std::pair<const K,E>> *t)
+{
+    if (t!=NULL)
+    {
+        in_order(t->left_node);
+        std::cout<<t<<std::endl;
+        in_order(t->right_node);
+    }
+    
+};
 #endif
