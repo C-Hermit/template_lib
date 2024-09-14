@@ -2554,6 +2554,52 @@ std::pair<const K,E> *indexed_avl_tree<K,E>::get(const int the_index)const
     return NULL;
 };
 template<class K,class E>
+void indexed_avl_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
+{
+    indexed_avl_tree_node<std::pair<const K,E>> *p=root,
+                                                *previous_p=NULL,
+                                                *A=NULL,
+                                                *B=NULL;
+    //find A_node
+    while(p!=NULL)
+    {
+        previous_p=p;
+        if (the_pair.first<p->element.first)
+        {
+            p=p->left_node;
+        }
+        else if (the_pair.first>p->element.first)
+        {
+            p=p->right_node;
+        }
+        else 
+        {
+            p->element.second=the_pair.second;
+            return;
+        }
+    }  
+    //insert new_node
+    indexed_avl_tree_node<std::pair<const K,E>> *new_node
+        =new indexed_avl_tree_node<std::pair<const K,E>>(the_pair);
+    if (root!=NULL)
+    {
+        if (the_pair.first<previous_p->element.first)
+        {
+            previous_p->left_node=new_node;
+        }
+        else if (the_pair.first>previous_p->element.first)
+        {
+            previous_p->right_node=new_node;
+        }
+    }
+    else
+    {
+        root=new_node;
+        root->left_size=0;
+    }
+    binarytree_length++;    
+};
+template<class K,class E>
 void indexed_avl_tree<K,E>::ascend()
 {
     in_order(root);
@@ -2567,6 +2613,5 @@ void indexed_avl_tree<K,E>::in_order(indexed_avl_tree_node<std::pair<const K,E>>
         std::cout<<t<<std::endl;
         in_order(t->right_node);
     }
-    
 };
 #endif
