@@ -647,6 +647,7 @@ class indexed_avl_tree_node
 {
     public:
         T element;
+        indexed_avl_tree_node *parent_node;
         indexed_avl_tree_node *left_node;
         indexed_avl_tree_node *right_node;
         int left_size;
