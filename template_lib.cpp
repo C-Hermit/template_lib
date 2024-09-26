@@ -2563,6 +2563,7 @@ void indexed_avl_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
         indexed_avl_tree_node<std::pair<const K,E>> * previous_p=p;
         if (the_pair.first<p->element.first)
         {
+            p->left_size++;
             p=p->left_node;
         }
         else if (the_pair.first>p->element.first)
@@ -2583,12 +2584,10 @@ void indexed_avl_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
     {
         if (the_pair.first<p->parent_node->element.first)
         {
-            p->parent_node->bf++;
             p->parent_node->left_node=new_node;
         }
         else if (the_pair.first>p->parent_node->element.first)
         {
-            p->parent_node->bf--;
             p->parent_node->right_node=new_node;
         }
     }
@@ -2603,7 +2602,7 @@ void indexed_avl_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
     //change bf  
     while (p->parent_node!=NULL)
     {
-        if (p->parent_node->left_node->element.first==p->element.element)
+        if (p->parent_node->left_node==p->element)
         {
             p->parent_node->bf++;
         }
@@ -2642,6 +2641,112 @@ void indexed_avl_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
     }
 };
 template<class K,class E>
+void indexed_avl_tree<K,E>::erase(const K &the_key)
+{
+    indexed_avl_tree_node<std::pair<const K,E>> *p=root;
+    while (p!=NULL)
+    {
+        if (the_key<p->element.first)
+        {
+            p->parent_node=p;
+            p=p->left_node;
+        }
+        else if (the_key>p->element.first)
+        {
+            p->parent_node=p;
+            p=p->right_node;
+        }
+    }
+    if (p==NULL)return;
+    if (p->left_node!=NULL&&p->right_node!=NULL)
+    {
+        indexed_avl_tree_node<std::pair<const K,E>> *s=p->right_node;
+        while (s->right_node!=NULL)
+        {
+            s=s->right_node;
+        }
+        
+        indexed_avl_tree_node<std::pair<const K,E>> *q=
+            new indexed_avl_tree_node<std::pair<const K,E>>(s->element,p->left_node,p->right_node);
+        if (p->parent_node=NULL)
+        {
+            root=q;
+        }
+        else
+        {
+            if (p->parent_node->left_node==p)
+            {
+                p->parent_node->left_node=q;
+            }
+            else
+            {
+                p->parent_node->right_node=q;
+            }
+        }
+        delete p;
+        p=s;
+    }
+    indexed_avl_tree_node<std::pair<const K,E>> *nozero_child=NULL;
+    if(p->left_node!=NULL)
+    {
+        nozero_child=p->left_node;
+    }
+    else if (p->right_node!=NULL)
+    {
+        nozero_child=p->right_node;
+    }
+    if (p==root)
+    {
+        root=nozero_child;
+    }
+    else
+    {
+        if (p->parent_node->left_node=p)
+        {
+            p->parent_node->left_node=nozero_child;
+        }
+        else if(p->parent_node->right_node=nozero_child) 
+        {
+            p->parent_node->right_node=nozero_child;
+        }
+    }   
+    delete p;
+    binarytree_length--;
+    p=nozero_child;
+    //change bf
+    while (p->parent_node!=NULL)
+    {
+        if (p->parent_node->left_node=p)
+        {
+            p->bf--;
+        }
+        else 
+        {
+            p.bf++;
+        }
+        if (p->parent_node->bf==-1||p->parent_node->bf==1)break;
+        else if(p->parent_node.bf==0)p=p->parent_node;
+        else
+        {
+            if (p->parent_node->bf==-2)//L case
+            {
+                /* code */
+            }
+            else//R case
+            {
+                /* code */
+            }
+            
+            
+        }
+    }
+}
+template<class K,class E>
+void indexed_avl_tree<K,E>::erase(const int the_key)
+{
+
+}
+template<class K,class E>
 void indexed_avl_tree<K,E>::ascend()
 {
     in_order(root);
@@ -2662,6 +2767,7 @@ void indexed_avl_tree<K,E>::rotateLL(indexed_avl_tree_node<std::pair<const K,E>>
     indexed_avl_tree_node<std::pair<const K,E>> *A=t->parent_node;
     A->left_node=t->right_node;
     t->right_node->parent_node=A;
+    A->left_size=A->left_node->left_size+1;
     A->bf=0;
     t->right_node=A;
     A->parent_node=t;
@@ -2669,13 +2775,13 @@ void indexed_avl_tree<K,E>::rotateLL(indexed_avl_tree_node<std::pair<const K,E>>
     t->bf=0;
     if (t->parent_node->left_node==A)
     {
+        t->parent_node->left_size=t->left_size+1;
         t->parent_node->left_node=t;
     }
     else 
     {
         t->parent_node->right_node=t;
     }
-
 };
 template<class K,class E>
 void indexed_avl_tree<K,E>::rotateLR(indexed_avl_tree_node<std::pair<const K,E>> *t)
@@ -2693,10 +2799,12 @@ void indexed_avl_tree<K,E>::rotateRR(indexed_avl_tree_node<std::pair<const K,E>>
     A->bf=0;
     t->left_node=A;
     A->parent_node=t;
+    t->left_size=t->left_node->left_size+1;
     t->bf=0;
     t->parent_node=t->parent_node->parent_node;
     if (t->parent_node->left_node==A)
     {
+        t->parent_node->left_size=t->left_size+1;
         t->parent_node->left_node=t;
     }
     else 
