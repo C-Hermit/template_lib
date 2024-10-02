@@ -2730,14 +2730,23 @@ void indexed_avl_tree<K,E>::erase(const K &the_key)
         {
             if (p->parent_node->bf==-2)//L case
             {
-                /* code */
+                if (p->parent_node->left_node->bf==0)//L0
+                {
+
+                }   
+                if (p->parent_node->left_node->bf==1)//L1
+                {
+                    
+                }
+                if (p->parent_node->left_node->bf==-1)//L-1
+                {
+
+                }       
             }
             else//R case
             {
                 /* code */
             }
-            
-            
         }
     }
 }
@@ -2760,63 +2769,5 @@ void indexed_avl_tree<K,E>::in_order(indexed_avl_tree_node<std::pair<const K,E>>
         std::cout<<t<<std::endl;
         in_order(t->right_node);
     }
-};
-template<class K,class E>
-void indexed_avl_tree<K,E>::rotateLL(indexed_avl_tree_node<std::pair<const K,E>> *t)
-{
-    indexed_avl_tree_node<std::pair<const K,E>> *A=t->parent_node;
-    A->left_node=t->right_node;
-    t->right_node->parent_node=A;
-    A->left_size=A->left_node->left_size+1;
-    A->bf=0;
-    t->right_node=A;
-    A->parent_node=t;
-    t->parent_node=t->parent_node->parent_node;
-    t->bf=0;
-    if (t->parent_node->left_node==A)
-    {
-        t->parent_node->left_size=t->left_size+1;
-        t->parent_node->left_node=t;
-    }
-    else 
-    {
-        t->parent_node->right_node=t;
-    }
-};
-template<class K,class E>
-void indexed_avl_tree<K,E>::rotateLR(indexed_avl_tree_node<std::pair<const K,E>> *t)
-{
-    indexed_avl_tree_node<std::pair<const K,E>> *C=t->right_node;
-    rotateRR(C);
-    rotateLL(C);
-};
-template<class K,class E>
-void indexed_avl_tree<K,E>::rotateRR(indexed_avl_tree_node<std::pair<const K,E>> *t)
-{
-    indexed_avl_tree_node<std::pair<const K,E>> *A=t->parent_node;
-    A->right_node=t->left_node;
-    t->left_node->parent_node=A;
-    A->bf=0;
-    t->left_node=A;
-    A->parent_node=t;
-    t->left_size=t->left_node->left_size+1;
-    t->bf=0;
-    t->parent_node=t->parent_node->parent_node;
-    if (t->parent_node->left_node==A)
-    {
-        t->parent_node->left_size=t->left_size+1;
-        t->parent_node->left_node=t;
-    }
-    else 
-    {
-        t->parent_node->right_node=t;
-    }
-};
-template<class K,class E>
-void indexed_avl_tree<K,E>::rotateRL(indexed_avl_tree_node<std::pair<const K,E>> *t)
-{
-    indexed_avl_tree_node<std::pair<const K,E>> *C=t->left_node;
-    rotateLL(C);
-    rotateRR(C);
 };
 #endif

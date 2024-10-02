@@ -682,10 +682,6 @@ class indexed_avl_tree:public indexed_bstree<K,E>
     protected:
         indexed_avl_tree_node<std::pair<const K,E>> *root;
         int binarytree_length;
-        void rotateLL(indexed_avl_tree_node<std::pair<const K,E>> *t);
-        void rotateLR(indexed_avl_tree_node<std::pair<const K,E>> *t);
-        void rotateRR(indexed_avl_tree_node<std::pair<const K,E>> *t);
-        void rotateRL(indexed_avl_tree_node<std::pair<const K,E>> *t);
 };
 #include"template_lib.cpp"
 #endif
