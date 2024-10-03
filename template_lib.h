@@ -677,8 +677,9 @@ class indexed_avl_tree:public indexed_bstree<K,E>
         void insert(const std::pair<const K,E> &the_pair);
         void erase(const K &the_key);
         void erase(const int the_index);
-        void L_rotate(indexed_avl_tree_node<std::pair<const K,E>> *t);
-        void R_rotate(indexed_avl_tree_node<std::pair<const K,E>> *t);
+        void rotate(indexed_avl_tree_node<std::pair<const K,E>>*cur);
+        void L_rotate(indexed_avl_tree_node<std::pair<const K,E>> *parent);
+        void R_rotate(indexed_avl_tree_node<std::pair<const K,E>> *parent);
         void ascend();
         void in_order(indexed_avl_tree_node<std::pair<const K,E>> *t);
     protected:
