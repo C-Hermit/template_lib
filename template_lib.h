@@ -651,7 +651,7 @@ class indexed_avl_tree_node
         indexed_avl_tree_node *left_node;
         indexed_avl_tree_node *right_node;
         int left_size;
-        int bf;
+        int h;
         indexed_avl_tree_node(){left_node=right_node=NULL;}
         indexed_avl_tree_node(const T &the_element):element(the_element)
         {
@@ -679,6 +679,9 @@ class indexed_avl_tree:public indexed_bstree<K,E>
         void erase(const int the_index);
         void ascend();
         void in_order(indexed_avl_tree_node<std::pair<const K,E>> *t);
+        void left_rotate(indexed_avl_tree_node<std::pair<const K,E>> *t);
+        void right_rotate(indexed_avl_tree_node<std::pair<const K,E>> *t);
+        void maintain(indexed_avl_tree_node<std::pair<const K,E>> *t);
     protected:
         indexed_avl_tree_node<std::pair<const K,E>> *root;
         int binarytree_length;

@@ -2614,26 +2614,129 @@ void indexed_avl_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
         else if(p->parent_node->bf==-1||p->parent_node->bf==1)p=p->parent_node;        
         else
         {
-            if (p->parent_node->bf==2)//A
+            if (p->parent_node->bf==2)//A R
             {
-                if (p->bf==1)//B
+                if (p->bf==1)//B RR
                 {
-                    rotateLL(p);
+                    indexed_avl_tree_node<std::pair<const K,E>> *A=p->parent_node,
+                                                                *Aparent=A->parent_node;
+                    A->left_node=p->right_node;
+                    if (p->right_node!=NULL)
+                    {
+                        p->right_node->parent_node=A;
+                    }
+                    p->right_node=A;
+                    A->parent_node=p;
+                    if (root==A)
+                    {
+                        root=p;
+                        root->parent_node=NULL;
+                    }
+                    else
+                    {
+                        if (Aparent->right_node==A)
+                        {
+                            Aparent->right_node=p;
+                        }
+                        else
+                        {
+                            Aparent->left_node=p;
+                        }
+                        p->parent_node=Aparent;
+                    }
+                    A->bf=p->bf=0;
                 }
-                else
+                else//RL
                 {
-                    rotateLR(p);
+                    indexed_avl_tree_node<std::pair<const K,E>> *A=p->parent_node,
+                                                                *Aparent=A->parent_node,
+                                                                *C=p->left_node;
+                    int C_bf=C->bf;
+                    p->right_node=C->left_node;
+                    if (C->left_node!=NULL)
+                    {
+                        C->left_node->parent_node=p;
+                    }
+                    C->left_node=p;
+                    p->parent_node=C;
+
+                    A->left_node=C;
+                    C->parent_node=A;
+
+                    A->left_node=C->right_node;
+                    if (C->right_node!=NULL)
+                    {
+                        C->right_node->parent_node=A;
+                    }
+                    C->right_node=A;
+                    A->parent_node=C;
+                    if (root==A)
+                    {
+                        root=C;
+                        root->parent_node=NULL;
+                    }
+                    {
+                        if (Aparent->left_node==A)
+                        {
+                            Aparent->left_node=C;
+                        }
+                        else
+                        {
+                            Aparent->right_node=C;
+                        }
+                        C->parent_node=Aparent;
+                    }
+                    if (C_bf==0)
+                    {
+                        A->bf=p->bf=C->bf=0;
+                    }
+                    else if (C_bf==1)
+                    {
+                        p->bf=1;
+                        A->bf=C->bf=0;
+                    }
+                    else
+                    {
+                        A->bf=-1;
+                        p->bf=C->bf=0;
+                    }
                 }
             }
-            if (p->parent_node->bf==-2)//C
+            if (p->parent_node->bf==-2)//A L
             {
-                if (p->bf==-1)
+                if (p->bf==-1)//LL
                 {
-                    rotateRR(p);
+                    indexed_avl_tree_node<std::pair<const K,E>> *A=p->parent_node,
+                                                                *Aparent=A->parent_node;
+                    A->right_node=p->left_node;
+                    if (p->left_node!=NULL)
+                    {
+                        p->left_node->parent_node=A;
+                    }
+                    p->left_node=A;
+                    A->parent_node=p;
+                    if (root==A)
+                    {
+                        root=p;
+                        root->parent_node=NULL;
+                    }
+                    else
+                    {
+                        if (Aparent->right_node==A)
+                        {
+                            Aparent->right_node=p;
+                        }
+                        else
+                        {
+                            Aparent->left_node=p;
+                        }
+                        p->parent_node=Aparent;
+                    }
+                    A->bf=p->bf=0;
                 }
-                else
+                else//LR
                 {
-                    rotateRL(p);
+                    
                 }
             }
             
