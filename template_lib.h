@@ -652,6 +652,7 @@ class indexed_avl_tree_node
         indexed_avl_tree_node *right_node;
         int left_size;
         int bf;
+        int h;
         indexed_avl_tree_node(){left_node=right_node=NULL;}
         indexed_avl_tree_node(const T &the_element):element(the_element)
         {
@@ -672,14 +673,23 @@ class indexed_avl_tree:public indexed_bstree<K,E>
         ~indexed_avl_tree();
         bool empty()const;
         int length()const;
+        int height(indexed_avl_tree_node<std::pair<const K,E>> *the_node);
+        void updateheight(indexed_avl_tree_node<std::pair<const K,E>> *the_node);
         std::pair<const K,E> *find(const K &the_key)const;
         std::pair<const K,E> *get(const int the_index)const;
         void insert(const std::pair<const K,E> &the_pair);
+        void recur_insert(const std::pair <const K,E> &the_pair);
+        indexed_avl_tree_node<std::pair<const K,E>> *recur_insert_helper(indexed_avl_tree_node<std::pair<const K,E>> *the_node,const std::pair<const K,E> &the_pair);
         void erase(const K &the_key);
         void erase(const int the_index);
+        void recur_erase(const K &the_key);
+        indexed_avl_tree_node<std::pair<const K,E>> *recur_erase_helper(indexed_avl_tree_node<std::pair<const K,E>> *the_node,const K &the_key);
         void rotate(indexed_avl_tree_node<std::pair<const K,E>>*cur);
         void L_rotate(indexed_avl_tree_node<std::pair<const K,E>> *parent);
         void R_rotate(indexed_avl_tree_node<std::pair<const K,E>> *parent);
+        indexed_avl_tree_node<std::pair<const K,E>> *recur_rotate(indexed_avl_tree_node<std::pair<const K,E>> *the_node);
+        indexed_avl_tree_node<std::pair<const K,E>> *recur_rotateL(indexed_avl_tree_node<std::pair<const K,E>> *the_node);
+        indexed_avl_tree_node<std::pair<const K,E>> *recur_rotateR(indexed_avl_tree_node<std::pair<const K,E>> *the_node);
         void ascend();
         void in_order(indexed_avl_tree_node<std::pair<const K,E>> *t);
     protected:

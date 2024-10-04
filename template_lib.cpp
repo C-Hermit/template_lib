@@ -2515,6 +2515,16 @@ bool indexed_avl_tree<K,E>::empty()const{return binarytree_length==0;};
 template<class K,class E>
 int indexed_avl_tree<K,E>::length()const{return binarytree_length;};
 template<class K,class E>
+int indexed_avl_tree<K,E>::height(indexed_avl_tree_node<std::pair<const K,E>> *the_node)
+{
+    return the_node==nullptr?-1:the_node->h;
+}
+template<class K,class E>
+void indexed_avl_tree<K,E>::updateheight(indexed_avl_tree_node<std::pair<const K,E>> *the_node)
+{
+    the_node->h=std::max(the_node->left_node->h,the_node->right_node->h)+1;
+};
+template<class K,class E>
 std::pair<const K,E> *indexed_avl_tree<K,E>::find(const K &the_key)const
 {
     indexed_avl_tree_node<std::pair<const K,E>> *p=root;
@@ -2603,6 +2613,32 @@ void indexed_avl_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
     binarytree_length++;  
     //change bf  
     rotate(p);
+};
+template<class K,class E>
+void indexed_avl_tree<K,E>::recur_insert(const std::pair<const K,E> &the_pair)
+{
+    root=recur_insert_helper(root,the_pair);
+}
+template<class K,class E>
+indexed_avl_tree_node<std::pair<const K,E>> *indexed_avl_tree<K,E>::recur_insert_helper(indexed_avl_tree_node<std::pair<const K,E>> *the_node,const std::pair<const K,E> &the_pair)
+{
+    if (the_node==nullptr)
+    {
+        return new indexed_avl_tree_node<std::pair<const K,E>>(the_pair);
+    }
+    if (the_pair.first<the_node->element.first)
+    {
+        the_node->left_node=recur_insert_helper(the_node->left_node,the_pair);
+    }
+    else if (the_pair.first>the_node->element.first)
+    {
+        the_node->right_node=recur_insert_helper(the_node->right_node,the_pair);
+    }
+    else return the_node;
+    updateheight(the_node);
+    the_node=recur_rotate(the_node);
+    return the_node;
+    
 };
 template<class K,class E>
 void indexed_avl_tree<K,E>::erase(const K &the_key)
@@ -2758,6 +2794,58 @@ void indexed_avl_tree<K,E>::erase(const int the_index)
     rotate(p);
 }
 template<class K,class E>
+void indexed_avl_tree<K,E>::recur_erase(const K &the_key)
+{
+    root=recur_erase_helper(root,the_key);
+};
+template<class K,class E>
+indexed_avl_tree_node<std::pair<const K,E>> *indexed_avl_tree<K,E>::recur_erase_helper(indexed_avl_tree_node<std::pair<const K,E>> *the_node,const K &the_key)
+{
+    if (the_node==nullptr)
+    {
+        return nullptr;
+    }
+    if (the_key<the_node->element.first)
+    {
+        the_node->left_node=recur_erase_helper(the_node->left_node,the_key);
+    }
+    else if (the_key >the_node->element.first)
+    {
+        the_node->right_node=recur_erase_helper(the_node->right_node,the_key);
+    }
+    else
+    {
+        if (the_node->left_node==nullptr||the_node->right_node==nullptr)
+        {
+            indexed_avl_tree_node<std::pair<const K,E>> *nozero_child=the_node->left_node!=nullptr?the_node->left_node:the_node->right_node;
+            if (nozero_child==nullptr)
+            {
+                delete the_node;
+                return nullptr;
+            }
+            else
+            {
+                delete the_node;
+                the_node=nozero_child;
+            }
+        }
+        else
+        {
+            indexed_avl_tree_node<std::pair<const K,E>> *temp_node=the_node->right_node;
+            while (temp_node->left_node!=nullptr)
+            {
+                temp_node=temp_node->left_node;
+            }
+            K temp=the_key;
+            the_node->right_node=recur_erase_helper(the_node->right_node,temp);
+            the_node->element=temp_node->element;
+        }
+    }
+    updateheight(the_node);
+    the_node=recur_rotate(the_node);
+    return the_node;
+};
+template<class K,class E>
 void indexed_avl_tree<K,E>::rotate(indexed_avl_tree_node<std::pair<const K,E>> *cur)
 {
     while (cur->parent_node!=nullptr)
@@ -2886,6 +2974,60 @@ void indexed_avl_tree<K,E>::R_rotate(indexed_avl_tree_node<std::pair<const K,E>>
         subL->bf=parent->bf=0;
     }
 }
+template<class K,class E>
+indexed_avl_tree_node<std::pair<const K,E>> *indexed_avl_tree<K,E>::recur_rotate(indexed_avl_tree_node<std::pair<const K,E>> *the_node)
+{
+    if (the_node->bf>1)
+    {
+        if (the_node->left_node->bf>=0)
+        {
+            return recur_rotateR(the_node);
+        }
+        else
+        {
+            the_node->left_node=recur_rotateL(the_node->left_node);
+            return recur_rotateR(the_node);
+        }
+        
+    }
+    else if (the_node->bf<-1)
+    {
+        if (the_node->right_node<=0)
+        {
+            return recur_rotateL(the_node);
+        }
+        else
+        {
+            the_node->right_node=recur_rotateR(the_node->right_node);
+            return recur_rotateR(the_node);
+        }
+        
+    }
+    return the_node;
+};
+template<class K,class E>
+indexed_avl_tree_node<std::pair<const K,E>> *indexed_avl_tree<K,E>::recur_rotateL(indexed_avl_tree_node<std::pair<const K,E>> *the_node)
+{
+    indexed_avl_tree_node<std::pair<const K,E>> *subR=the_node->right_node,
+                                                *subRL=subR->left_node;
+    subR->left_node=the_node;
+    the_node->right_node=subRL;
+    updateheight(the_node);
+    updateheight(subR);
+    return subR;
+
+};
+template<class K,class E>
+indexed_avl_tree_node<std::pair<const K,E>> *indexed_avl_tree<K,E>::recur_rotateR(indexed_avl_tree_node<std::pair<const K,E>> *the_node)
+{
+    indexed_avl_tree_node<std::pair<const K,E>> *subL=the_node->right_node,
+                                                *subLR=subL->left_node;
+    subL->right_node=the_node;
+    the_node->left_node=subLR;
+    updateheight(the_node);
+    updateheight(subL);
+    return subL;
+};
 template<class K,class E>
 void indexed_avl_tree<K,E>::ascend()
 {
