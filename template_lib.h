@@ -653,16 +653,17 @@ class indexed_avl_tree_node
         int left_size;
         int bf;
         int h;
-        indexed_avl_tree_node(){left_node=right_node=NULL;}
+        indexed_avl_tree_node(){left_node=right_node=parent_node=nullptr;}
         indexed_avl_tree_node(const T &the_element):element(the_element)
         {
-            left_node=right_node=NULL;
+            left_node=right_node=parent_node=nullptr;
         }
         indexed_avl_tree_node(const T &the_element,indexed_avl_tree_node<T> *the_left_node,indexed_avl_tree_node *the_right_node)
         :element(the_element)
         {
             left_node=the_left_node;
             right_node=the_right_node;
+            parent_node=nullptr;
         }
 };
 template<class K,class E>
@@ -695,6 +696,28 @@ class indexed_avl_tree:public indexed_bstree<K,E>
     protected:
         indexed_avl_tree_node<std::pair<const K,E>> *root;
         int binarytree_length;
+};
+template<class T>
+class RB_tree_node
+{
+    public:
+        T element;
+        RB_tree_node *left_child;
+        RB_tree_node *right_child;
+        RB_tree_node *parent;
+        bool color;//black:0 red:1
+        RB_tree_node(){left_child=right_child=parent=nullptr;}
+        RB_tree_node(const T &the_element):element(the_element)
+        {
+            left_child=right_child=parent=nullptr;
+        }
+        RB_tree_node(const T &the_element,RB_tree_node *the_left_node,RB_tree_node *the_right_child)
+        :element(the_element)
+        {
+            left_child=the_left_node;
+            right_child=the_right_child;
+            parent=nullptr;
+        }
 };
 #include"template_lib.cpp"
 #endif
