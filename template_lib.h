@@ -719,5 +719,22 @@ class RB_tree_node
             parent=nullptr;
         }
 };
+template<class K,class E>
+class RB_tree:public bs_tree<K,E>
+{
+    public:
+        RB_tree();
+        ~RB_tree();
+        void empty()const;
+        void length()const;
+        std::pair<const K,E> *find(const K &the_key)const;
+        void insert(const std::pair<const K,E> &the_pair);
+        void erase(const K &the_key);
+        void ascend();
+        void in_order(RB_tree_node<std::pair<const K,E>> *t);
+    private:
+        RB_tree_node<std::pair<const K,E>> *root;
+        int RB_tree_length;
+};
 #include"template_lib.cpp"
 #endif
