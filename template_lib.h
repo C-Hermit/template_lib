@@ -705,7 +705,7 @@ class RB_tree_node
         RB_tree_node *left_child;
         RB_tree_node *right_child;
         RB_tree_node *parent;
-        bool color;//black:0 red:1
+        bool color;//black:1 red:0
         RB_tree_node(){left_child=right_child=parent=nullptr;}
         RB_tree_node(const T &the_element):element(the_element)
         {
@@ -725,11 +725,12 @@ class RB_tree:public bs_tree<K,E>
     public:
         RB_tree();
         ~RB_tree();
-        void empty()const;
-        void length()const;
+        bool empty()const;
+        int length()const;
         std::pair<const K,E> *find(const K &the_key)const;
         void insert(const std::pair<const K,E> &the_pair);
         void erase(const K &the_key);
+        void balance(RB_tree_node<std::pair<const K,E>> *cur_node);
         void ascend();
         void in_order(RB_tree_node<std::pair<const K,E>> *t);
     private:

@@ -2763,7 +2763,7 @@ void indexed_avl_tree<K,E>::erase(const int the_index)
         delete p;
         p=s;
     }
-    indexed_bstree_node<std::pair<const K,E>> *nozero_child;
+    indexed_bstree_node<std::pair<const K,E>> *nozero_child=nullptr;
     if (p->left_child!=NULL)
     {
         nozero_child=p->left_child;
@@ -3043,4 +3043,177 @@ void indexed_avl_tree<K,E>::in_order(indexed_avl_tree_node<std::pair<const K,E>>
         in_order(t->right_node);
     }
 };
+/* --------------------------------- RB_tree -------------------------------- */
+template<class K,class E>
+RB_tree<K,E>::RB_tree()
+{
+    root=nullptr;
+    RB_tree_length=0;
+};
+template<class K,class E>
+RB_tree<K,E>::~RB_tree()
+{
+    delete root;
+}
+template<class K,class E>
+bool RB_tree<K,E>::empty()const{return RB_tree_length==0;};
+template<class K,class E>
+int RB_tree<K,E>::length()const{return RB_tree_length;};
+template <class K,class E>
+std::pair<const K,E> *RB_tree<K,E>::find(const K &the_key)const
+{
+    RB_tree_node<std::pair<const K,E>> *cur_node=root;
+    while (cur_node!=nullptr)
+    {
+        if (the_key<cur_node->element.first)
+        {
+            cur_node=cur_node->left_child;
+        }
+        else if (the_key>cur_node->element.first)
+        {
+            cur_node=cur_node->right_child;
+        }
+        else return cur_node->element;
+    }
+    return nullptr;
+}
+template<class K,class E>
+void RB_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
+{
+    RB_tree_node<std::pair<const K,E>> *cur_node=root,
+                                       *parent_node=nullptr;
+    while (cur_node!=nullptr)
+    {
+        parent_node=cur_node;
+        if (the_pair.first<cur_node->element.first)
+        {
+            cur_node=cur_node->left_node;
+        }
+        else if(the_pair.first>cur_node->element.first)
+        {
+            cur_node=cur_node->right_node;
+        }
+        else cur_node->element.second=the_pair.second;
+    }
+    
+    RB_tree_node<std::pair<const K,E>> *new_node=
+        new RB_tree_node<std::pair<const K,E>>(the_pair);
+    if (root!=nullptr)
+    {
+        if (the_pair.first<parent_node->element.first)
+        {
+            parent_node->left_child=new_node;
+        }
+        else if (the_pair.first>parent_node->element.first)
+        {
+            parent_node->right_child=new_node;
+        }
+        new_node->parent=parent_node;
+        new_node->color=0;
+    }
+    else
+    {
+        root=new_node;
+        new_node->color=1;
+        new_node->parent=nullptr;
+    }
+    RB_tree_length++;
+    delete cur_node;
+    cur_node=new_node;
+    //balance
+    balance(cur_node);
+}
+template<class K,class E>
+void RB_tree<K,E>::erase(const K &the_key)
+{
+    RB_tree_node<std::pair<const K,E>> *cur_node=root;
+    while (cur_node!=nullptr)
+    {
+        if (the_key<cur_node->element.first)
+        {
+            cur_node=cur_node->left_child;
+        }
+        else if (the_key>cur_node->element.first)
+        {
+            cur_node=cur_node->right_child;
+        }
+    }
+    if (cur_node==nullptr)return;
+
+    if (cur_node->left_child!=nullptr&&cur_node->right_child!=nullptr)
+    {
+        RB_tree_node<std::pair<const K,E>> *s=cur_node->left_child;
+        while (cur_node->right_child!=nullptr)
+        {
+            cur_node=cur_node->right_child;
+        }
+        RB_tree_node<std::pair<const K,E>> *q=
+            new RB_tree_node<std::pair<const K,E>>(s->element,cur_node->left_child,cur_node->right_child);
+        if (cur_node!=root)
+        {
+            root=q;
+            root->color=1;
+            root->parent=nullptr;
+        }
+        else
+        {
+            if(cur_node->parent->left_child=cur_node)
+            {
+                cur_node->parent->left_child=q;
+            }
+            else
+            {
+                cur_node->parent->right_child=q;
+            }   
+        }
+        delete cur_node;
+        cur_node=s;
+    }   
+    RB_tree_node<std::pair<const K,E>> *nozero_child=nullptr;
+    if (cur_node->left_child!=nullptr)
+    {
+        nozero_child=cur_node->left_child;
+    }
+    else if (cur_node->right_child!=nullptr)
+    {
+        nozero_child=cur_node->right_child;
+    }
+    if (cur_node=root)
+    {
+        root=nozero_child;
+        root->parent=nullptr;
+    }
+    else
+    {
+        if (cur_node->parent->left_child==cur_node)
+        {
+            cur_node->parent->left_child=nozero_child;
+        }
+        else if (cur_node->parent->right_child==cur_node)
+        {
+            cur_node->parent->right_child=nozero_child;
+        }
+        nozero_child->parent=cur_node->parent;
+    }
+    delete cur_node;
+    RB_tree_length--;
+    cur_node=nozero_child;
+    //balance
+    balance(cur_node);
+}
+template<class K,class E>
+void RB_tree<K,E>::ascend()
+{
+    in_order(root);
+}
+template<class K,class E>
+void RB_tree<K,E>::in_order(RB_tree_node<std::pair<const K,E>> *t)
+{
+    if (t!=nullptr)
+    {
+        in_order(t->left_child);
+        std::count<<t<<std::endl;
+        in_order(t->right_child);      
+    }
+}
 #endif
