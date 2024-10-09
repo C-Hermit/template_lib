@@ -731,6 +731,8 @@ class RB_tree:public bs_tree<K,E>
         void insert(const std::pair<const K,E> &the_pair);
         void erase(const K &the_key);
         void balance(RB_tree_node<std::pair<const K,E>> *cur_node);
+        void L_rotate(RB_tree_node<std::pair<const K,E>> *parent);
+        void R_rotate(RB_tree_node<std::pair<const K,E>> *parent);
         void ascend();
         void in_order(RB_tree_node<std::pair<const K,E>> *t);
     private:

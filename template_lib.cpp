@@ -3216,15 +3216,23 @@ void RB_tree<K,E>::balance(RB_tree_node<std::pair<const K,E>> *cur_node)
                 {
                     gparent->color=0;
                     parent->color=gparent->right_child->color=1;
+                    if (gparent->parent->color=0)
+                    {
+                        balance(gparent);
+                    }            
                 }
                 else//b
                 {
                     if (parent->left_child==cur_node)//LLb
                     {
+                        gparent->color=0;
+                        parent->color=1;
                         R_rotate(gparent);       
                     }
                     else//LRb
                     {
+                        gparent->color=0;
+                        cur_node->color=1;
                         L_rotate(gparent->left_child);
                         R_rotate(gparent);
                     }
@@ -3236,6 +3244,11 @@ void RB_tree<K,E>::balance(RB_tree_node<std::pair<const K,E>> *cur_node)
                 {
                     gparent->color=0;
                     parent->color=gparent->left_child->color=1;
+                    if (gparent->parent->color=0)
+                    {
+                        balance(gparent);
+                    }
+                    
                 }
                 else
                 {
@@ -3253,6 +3266,68 @@ void RB_tree<K,E>::balance(RB_tree_node<std::pair<const K,E>> *cur_node)
         }
     }
     return;
+}
+template<class K,class E>
+void RB_tree<K,E>::L_rotate(RB_tree_node<std::pair<const K,E>> *parent)
+{
+    RB_tree_node<std::pair<const K,E>> *gparent=parent->parent,
+                                       *subR=gparent->right_child,
+                                       *subRL=subR->left_child;
+    parent->right_child=subRL;
+    if (subRL!=nullptr)
+    {
+        subRL->parent=parent;
+    }
+    subR->left_child=parent;
+    parent->parent=subR;
+    if (root==parent)
+    {
+        root=subR;
+        root->parent=NULL;
+    }
+    else
+    {
+        if (gparent->left_child=parent)
+        {
+            gparent->left_child=subR;
+        }
+        else
+        {
+            gparent->right_child=subR;
+        }
+        subR->parent=gparent;
+    }
+}
+template<class K,class E>
+void RB_tree<K,E>::R_rotate(RB_tree_node<std::pair<const K,E>> *parent)
+{
+    RB_tree_node<std::pair<const K,E>> *gparent=parent->parent,
+                                       *subL=parent->left_child,
+                                       *subLR=subL->right_child;
+    parent->left_child=subLR;
+    if (subLR!=nullptr)
+    {
+        subLR->parent=parent;
+    }
+    subL->right_child=parent;
+    parent->parent=subL;
+    if (root==parent)
+    {
+        root=subL;
+        root->parent=nullptr;
+    }
+    else
+    {
+        if (gparent->left_child==parent)
+        {
+            gparent->left_child=subL;
+        }
+        else
+        {
+            gparent->right_child=subL;
+        }
+        subL->parent=gparent;
+    }
 }
 template<class K,class E>
 void RB_tree<K,E>::ascend()
