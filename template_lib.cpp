@@ -3202,6 +3202,59 @@ void RB_tree<K,E>::erase(const K &the_key)
     balance(cur_node);
 }
 template<class K,class E>
+void RB_tree<K,E>::balance(RB_tree_node<std::pair<const K,E>> *cur_node)
+{
+    if (cur_node!=root)
+    {
+        RB_tree_node<std::pair<const K,E>> *parent=cur_node->parent,
+                                           *gparent=parent->parent;
+        if (parent->color==0)//unbalance
+        {
+            if (gparent->left_child==parent)//L
+            {
+                if (gparent->right_child->color==0)//r
+                {
+                    gparent->color=0;
+                    parent->color=gparent->right_child->color=1;
+                }
+                else//b
+                {
+                    if (parent->left_child==cur_node)//LLb
+                    {
+                        R_rotate(gparent);       
+                    }
+                    else//LRb
+                    {
+                        L_rotate(gparent->left_child);
+                        R_rotate(gparent);
+                    }
+                }
+            }
+            else//R
+            {
+                if (gparent->left_child->color==0)
+                {
+                    gparent->color=0;
+                    parent->color=gparent->left_child->color=1;
+                }
+                else
+                {
+                    if (parent->right_child==cur_node)//RRb
+                    {
+                        L_rotate(gparent);
+                    }
+                    else//RLb
+                    {
+                        R_rotate(gparent->right_child);
+                        L_rotete(gparent);
+                    }
+                }
+            }  
+        }
+    }
+    return;
+}
+template<class K,class E>
 void RB_tree<K,E>::ascend()
 {
     in_order(root);
