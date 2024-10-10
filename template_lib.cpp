@@ -3182,6 +3182,7 @@ void RB_tree<K,E>::erase(const K &the_key)
     {
         root=nozero_child;
         root->parent=nullptr;
+        root->color=1;
     }
     else
     {
@@ -3194,6 +3195,7 @@ void RB_tree<K,E>::erase(const K &the_key)
             cur_node->parent->right_child=nozero_child;
         }
         nozero_child->parent=cur_node->parent;
+        nozero_child->color=cur_node->color;
     }
     delete cur_node;
     RB_tree_length--;

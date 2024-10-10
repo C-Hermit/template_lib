@@ -739,5 +739,43 @@ class RB_tree:public bs_tree<K,E>
         RB_tree_node<std::pair<const K,E>> *root;
         int RB_tree_length;
 };
+template<class T>
+class Splay_tree_node
+{
+    public:
+        T element;
+        Splay_tree_node *left_node;
+        Splay_tree_node *right_node;
+        Splay_tree_node *parent;
+    Splay_tree_node(){left_node=right_node=parent=nullptr;};
+    Splay_tree_node(const T &the_element):element(the_element)
+    {
+        left_node=right_node=parent=nullptr;
+    }
+    Splay_tree_node(const T &the_element,Splay_tree_node *the_left_node,Splay_tree_node *the_right_node)
+    :element(the_element)
+    {
+        left_node=the_left_node;
+        right_node=the_right_node;
+        parent=NULL;
+    }
+};
+template<class E,class K>
+class Splay_tree:public bs_tree<K,E>
+{
+    public:
+        Splay_tree();
+        ~Splay_tree();
+        bool empty()const;
+        int length()const;
+        std::pair<const K,E> *find(const K &the_key);
+        void insert(const std::pair<const K,E> *the_pair);
+        void erase(const K &the_key);
+        void ascend();
+        void in_order(Splay_tree_node<std::pair<const K,E>> *t);
+    private:
+        Splay_tree_node<std::pair<const K,E>> *root;
+        int Splay_tree_length;
+};
 #include"template_lib.cpp"
 #endif
