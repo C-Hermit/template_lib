@@ -760,7 +760,7 @@ class Splay_tree_node
         parent=NULL;
     }
 };
-template<class E,class K>
+template<class K,class E>
 class Splay_tree:public bs_tree<K,E>
 {
     public:
@@ -771,6 +771,9 @@ class Splay_tree:public bs_tree<K,E>
         std::pair<const K,E> *find(const K &the_key);
         void insert(const std::pair<const K,E> *the_pair);
         void erase(const K &the_key);
+        void Splay(Splay_tree_node<std::pair<const K,E>> *cur_node);
+        void L_rotate(Splay_tree_node<std::pair<const K,E>> *parent);
+        void R_rotate(Splay_tree_node<std::pair<const K,E>> *parent);
         void ascend();
         void in_order(Splay_tree_node<std::pair<const K,E>> *t);
     private:

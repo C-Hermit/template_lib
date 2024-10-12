@@ -3143,9 +3143,9 @@ void RB_tree<K,E>::erase(const K &the_key)
     if (cur_node->left_child!=nullptr&&cur_node->right_child!=nullptr)
     {
         RB_tree_node<std::pair<const K,E>> *s=cur_node->left_child;
-        while (cur_node->right_child!=nullptr)
+        while (s->right_child!=nullptr)
         {
-            cur_node=cur_node->right_child;
+            s=s->right_child;
         }
         RB_tree_node<std::pair<const K,E>> *q=
             new RB_tree_node<std::pair<const K,E>>(s->element,cur_node->left_child,cur_node->right_child);
@@ -3165,6 +3165,7 @@ void RB_tree<K,E>::erase(const K &the_key)
             {
                 cur_node->parent->right_child=q;
             }   
+            q->parent=cur_node->parent;
         }
         delete cur_node;
         cur_node=s;
@@ -3345,5 +3346,290 @@ void RB_tree<K,E>::in_order(RB_tree_node<std::pair<const K,E>> *t)
         std::count<<t<<std::endl;
         in_order(t->right_child);      
     }
+}
+/* ------------------------------- Splay_tree ------------------------------- */
+template<class K,class E>
+Splay_tree<K,E>::Splay_tree()
+{
+    root=nullptr;
+    Splay_tree_length=0;
+};
+template<class K,class E>
+Splay_tree<K,E>::~Splay_tree()
+{
+    delete root;
+};
+template<class K,class E>
+bool Splay_tree<K,E>::empty()const{return Splay_tree_length==0;};
+template<class K,class E>
+int Splay_tree<K,E>::length()const{return Splay_tree_length;};
+template<class K,class E>
+std::pair<const K,E> *Splay_tree<K,E>::find(const K &the_key)
+{
+    Splay_tree_node<std::pair<const K,E>> *cur_node=root;
+    while (cur_node!=nullptr)
+    {
+        if (the_key<cur_node->element.first)
+        {
+            cur_node=cur_node->left_node;
+        }
+        else if (the_key>cur_node->element.first)
+        {
+            cur_node=cur_node->right_node;
+        }
+        else return cur_node->element;
+    }
+    return nullptr;
+};
+template<class K,class E>
+void Splay_tree<K,E>::insert(const std::pair<const K,E> *the_pair)
+{
+    Splay_tree_node<std::pair<const K,E>> *cur_node=root,
+                                          *parent_node=nullptr;
+    while (cur_node!=nullptr)
+    {
+        parent_node=cur_node;
+        if (the_pair->first<cur_node->element.first)
+        {
+            cur_node=cur_node->left_node;
+        }
+        else if (the_pair->first>cur_node->element.first)
+        {
+            cur_node=cur_node->right_node;
+        }
+        else 
+        {
+            cur_node->element.second=the_pair->second;
+            return;
+        }
+    }
+    Splay_tree_node<std::pair<const K,E>> *new_node=
+        new Splay_tree_node<std::pair<const K,E>>(the_pair);
+    if (root!=nullptr)
+    {
+        root=new_node;
+        root->parent=nullptr;
+    }
+    else
+    {
+        if (the_pair->first<parent_node->element.first)
+        {
+            parent_node->left_node=new_node;
+        }
+        else
+        {
+            parent_node->right_node=new_node;
+        }
+        new_node->parent=parent_node;
+    }
+    delete cur_node;
+    cur_node=new_node;
+    //Splay
+    Splay(cur_node);
+};
+template<class K,class E>
+void Splay_tree<K,E>::erase(const K &the_key)
+{
+    Splay_tree_node<std::pair<const K,E>> *cur_node=root;
+    while (cur_node!=nullptr)
+    {
+        if (the_key<cur_node->element.first)
+        {
+            cur_node=cur_node->left_node;
+        }
+        else if (the_key>cur_node->right_node)        
+        {
+            cur_node=cur_node->right_node;
+        }
+    }
+    if (cur_node==nullptr){return;};
+
+    if (cur_node->left_node!=nullptr&&cur_node->right_node!=nullptr)
+    {
+        Splay_tree_node<std::pair<const K,E>> *s=cur_node->left_node;
+        while (s->right_node!=nullptr)
+        {
+            s=s->right_node;
+        }
+        Splay_tree_node<std::pair<const K,E>> *q=
+            new Splay_tree_node<std::pair<const K,E>>(s->element,cur_node->left_node,cur_node->right_node);
+        if (root==cur_node)
+        {
+            root=q;
+            root->parent=nullptr;
+        }
+        else
+        {
+            if (cur_node->parent->left_node==cur_node)
+            {
+                cur_node->parent->left_node=q;
+            }
+            else if (cur_node->parent->right_node==cur_node)
+            {
+                cur_node->parent->right_node=q;
+            }
+            q->parent=cur_node->parent;
+        }    
+        delete cur_node;
+        cur_node=s;
+    }
+    Splay_tree_node<std::pair<const K,E>> *nozero_child=nullptr;
+    if (cur_node->left_node!=nullptr)
+    {
+        nozero_child=cur_node->left_node;
+    }
+    if (cur_node->right_node!=nullptr)
+    {
+        nozero_child=cur_node->right_node;
+    }
+    if (cur_node==root)
+    {
+        root=nozero_child;
+        nozero_child->parent=nullptr;
+    }
+    else
+    {
+        if (cur_node->parent->left_node=cur_node)
+        {
+            cur_node->parent->left_node=nozero_child;
+        }
+        else if (cur_node->parent->right_node=cur_node)
+        {
+            cur_node->parent->right_node=nozero_child;
+        }
+        nozero_child->parent=cur_node->parent;        
+    }
+    delete cur_node;
+    Splay_tree_length--;
+    cur_node=nozero_child;
+    //Splay
+    Splay(cur_node);
+};
+template<class K,class E>
+void Splay_tree<K,E>::Splay(Splay_tree_node<std::pair<const K,E>> *cur_node)
+{
+    while (cur_node!=root)
+    {
+        if (cur_node->parent!=nullptr)
+        {
+            Splay_tree_node<std::pair<const K,E>> *parent=cur_node->parent;
+            if (parent->parent!=nullptr)
+            {
+                Splay_tree_node<std::pair<const K,E>> *gparent=parent->parent;
+                if(gparent->left_node=parent)//L
+                {
+                    if (parent->left_node==cur_node)//LL
+                    {
+                        R_rotate(parent);
+                        R_rotate(gparent);
+                    }
+                    else if(parent->right_node==cur_node)//LR
+                    {
+                        L_rotate(parent);
+                        R_rotatr(gparent);
+                    }
+                }
+                else//R
+                {
+                    if (parent->right_node==cur_node)//RR
+                    {
+                        L_rotate(parent);
+                        L_rotate(gparent);
+                    }
+                    else if(parent->left_node=cur_node)//RL
+                    {
+                        R_rotate(parent);
+                        L_rotate(gparent);
+                    }
+                }
+            }
+            else
+            {
+                if (parent->left_node==cur_node)//L
+                {
+                    R_rotate(parent);
+                }
+                else if (parent->right_node==cur_node)//R
+                {
+                    L_rotate(parent);
+                }
+            }
+        }
+    }
+    
+};
+template<class K,class E>
+void Splay_tree<K,E>::L_rotate(Splay_tree_node<std::pair<const K,E>> *parent)
+{
+    Splay_tree_node<std::pair<const K,E>> *gparent=parent->parent,
+                                          *subR=parent->right_node,
+                                          *subRL=subR->left_node;
+    parent->right_child=subRL;
+    if (subRL!=nullptr)
+    {
+        subRL->parent=parent;
+    }
+    subR->left_child=parent;
+    parent->parent=subR;
+    if (root==parent)
+    {
+        root=subR;
+        root->parent=NULL;
+    }
+    else
+    {
+        if (gparent->left_child=parent)
+        {
+            gparent->left_child=subR;
+        }
+        else
+        {
+            gparent->right_child=subR;
+        }
+        subR->parent=gparent;
+    }
+};
+template<class K,class E>
+void Splay_tree<K,E>::R_rotate(Splay_tree_node<std::pair<const K,E>> *parent)
+{
+    Splay_tree_node<std::pair<const K,E>> *gparent=parent->parent,
+                                          *subL=parent->right_node,
+                                          *subLR=subL->left_node;
+    parent->left_child=subLR;
+    if (subLR!=nullptr)
+    {
+        subLR->parent=parent;
+    }
+    subL->right_child=parent;
+    parent->parent=subL;
+    if (root==parent)
+    {
+        root=subL;
+        root->parent=nullptr;
+    }
+    else
+    {
+        if (gparent->left_child==parent)
+        {
+            gparent->left_child=subL;
+        }
+        else
+        {
+            gparent->right_child=subL;
+        }
+        subL->parent=gparent;
+    }
+};
+template<class K,class E>
+void Splay_tree<K,E>::ascend()
+{
+    in_order(root);
+};
+template<class K,class E>
+void Splay_tree<K,E>::in_order(Splay_tree_node<std::pair<const K,E>> *t)
+{
+    in_order(t->left_node);
+    std::cout<<t<<std::endl;
+    in_order(t->right_node);
 }
 #endif
