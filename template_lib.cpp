@@ -3443,7 +3443,9 @@ void Splay_tree<K,E>::erase(const K &the_key)
         }
     }
     if (cur_node==nullptr){return;};
-
+    
+    //Splay
+    Splay(cur_node);
     if (cur_node->left_node!=nullptr&&cur_node->right_node!=nullptr)
     {
         Splay_tree_node<std::pair<const K,E>> *s=cur_node->left_node;
@@ -3501,62 +3503,58 @@ void Splay_tree<K,E>::erase(const K &the_key)
     }
     delete cur_node;
     Splay_tree_length--;
-    cur_node=nozero_child;
-    //Splay
-    Splay(cur_node);
 };
 template<class K,class E>
 void Splay_tree<K,E>::Splay(Splay_tree_node<std::pair<const K,E>> *cur_node)
 {
-    while (cur_node!=root)
+    while(cur_node->parent!=nullptr)
     {
-        if (cur_node->parent!=nullptr)
+        Splay_tree_node<std::pair<const K,E>> *parent=cur_node->parent;
+        if (parent->parent!=nullptr)
         {
-            Splay_tree_node<std::pair<const K,E>> *parent=cur_node->parent;
-            if (parent->parent!=nullptr)
+            Splay_tree_node<std::pair<const K,E>> *gparent=parent->parent;
+            if(gparent->left_node=parent)//L
             {
-                Splay_tree_node<std::pair<const K,E>> *gparent=parent->parent;
-                if(gparent->left_node=parent)//L
-                {
-                    if (parent->left_node==cur_node)//LL
-                    {
-                        R_rotate(parent);
-                        R_rotate(gparent);
-                    }
-                    else if(parent->right_node==cur_node)//LR
-                    {
-                        L_rotate(parent);
-                        R_rotatr(gparent);
-                    }
-                }
-                else//R
-                {
-                    if (parent->right_node==cur_node)//RR
-                    {
-                        L_rotate(parent);
-                        L_rotate(gparent);
-                    }
-                    else if(parent->left_node=cur_node)//RL
-                    {
-                        R_rotate(parent);
-                        L_rotate(gparent);
-                    }
-                }
-            }
-            else
-            {
-                if (parent->left_node==cur_node)//L
+                if (parent->left_node==cur_node)//LL
                 {
                     R_rotate(parent);
+                    R_rotate(gparent);
+                    R_rotate(gparent);
                 }
-                else if (parent->right_node==cur_node)//R
+                else if(parent->right_node==cur_node)//LR
                 {
                     L_rotate(parent);
+                    R_rotatr(gparent);
+                }
+            }
+            else//R
+            {
+                if (parent->right_node==cur_node)//RR
+                {
+                    L_rotate(parent);
+                    L_rotate(gparent);
+                    L_rotate(gparent);
+                }
+                else if(parent->left_node=cur_node)//RL
+                {
+                    R_rotate(parent);
+                    L_rotate(gparent);
                 }
             }
         }
+        else
+        {
+            if (parent->left_node==cur_node)//L
+            {
+                R_rotate(parent);
+            }
+            else if (parent->right_node==cur_node)//R
+            {
+                L_rotate(parent);
+            }
+        }
     }
-    
+    root=cur_node;
 };
 template<class K,class E>
 void Splay_tree<K,E>::L_rotate(Splay_tree_node<std::pair<const K,E>> *parent)
@@ -3632,4 +3630,5 @@ void Splay_tree<K,E>::in_order(Splay_tree_node<std::pair<const K,E>> *t)
     std::cout<<t<<std::endl;
     in_order(t->right_node);
 }
+
 #endif

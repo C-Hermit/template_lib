@@ -739,6 +739,7 @@ class RB_tree:public bs_tree<K,E>
         RB_tree_node<std::pair<const K,E>> *root;
         int RB_tree_length;
 };
+/* ------------------------------- Splay_tree ------------------------------- */
 template<class T>
 class Splay_tree_node
 {
@@ -780,5 +781,58 @@ class Splay_tree:public bs_tree<K,E>
         Splay_tree_node<std::pair<const K,E>> *root;
         int Splay_tree_length;
 };
+/* --------------------------- m-way search tree -------------------------- */
+template<class T>
+class m_way_search_tree_node_node;
+template<class T>
+class m_way_search_tree_node
+{
+    int length;
+    m_way_search_tree_node_node<T> element[3];
+    m_way_search_tree_node<T> *child;
+
+};
+template<class T>
+class m_way_search_tree_node_node
+{
+    T *element;
+    m_way_search_tree_node<T> *child;
+};
+template<class K,class E>
+class m_way_search_tree
+{
+    public:
+        m_way_search_tree();
+        ~m_way_search_tree();
+        bool empty()const;
+        int length()const;
+        void insert(const std::pair<const K,E> *the_pair);
+        void erase(const K &the_key);
+    private:
+        m_way_search_tree_node<std::pair<const K,E>> *root;
+        int m_way_search_tree_node_length;
+};
+/* ---------------------------- B_tree --------------------------- */
+template<class T>
+class B_tree_node
+{
+    public:
+        T element;
+        B_tree_node*left_node;
+        B_tree_node *right_node;
+        bool leaf;
+    B_tree_node(){left_node=right_node=NULL;};
+    B_tree_node(const T &the_element):element(the_element)
+    {
+        left_node=right_node=NULL;
+    };
+    B_tree_node(const T &the_element,B_tree_node *the_left_node,B_tree_node *the_right_node)
+    :element(the_element)
+    {
+        left_node=the_left_node;
+        the_right_node=the_right_node;
+    }
+};
+
 #include"template_lib.cpp"
 #endif
