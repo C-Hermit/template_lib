@@ -3382,24 +3382,24 @@ std::pair<const K,E> *Splay_tree<K,E>::find(const K &the_key)
     return nullptr;
 };
 template<class K,class E>
-void Splay_tree<K,E>::insert(const std::pair<const K,E> *the_pair)
+void Splay_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
 {
     Splay_tree_node<std::pair<const K,E>> *cur_node=root,
                                           *parent_node=nullptr;
     while (cur_node!=nullptr)
     {
         parent_node=cur_node;
-        if (the_pair->first<cur_node->element.first)
+        if (the_pair.first<cur_node->element.first)
         {
             cur_node=cur_node->left_node;
         }
-        else if (the_pair->first>cur_node->element.first)
+        else if (the_pair.first>cur_node->element.first)
         {
             cur_node=cur_node->right_node;
         }
         else 
         {
-            cur_node->element.second=the_pair->second;
+            cur_node->element.second=the_pair.second;
             return;
         }
     }
@@ -3412,7 +3412,7 @@ void Splay_tree<K,E>::insert(const std::pair<const K,E> *the_pair)
     }
     else
     {
-        if (the_pair->first<parent_node->element.first)
+        if (the_pair.first<parent_node->element.first)
         {
             parent_node->left_node=new_node;
         }
@@ -3630,5 +3630,57 @@ void Splay_tree<K,E>::in_order(Splay_tree_node<std::pair<const K,E>> *t)
     std::cout<<t<<std::endl;
     in_order(t->right_node);
 }
+/* ------------------------- m_way_search_tree_node ------------------------- */
+template<class K,class E>
+m_way_search_tree_node<K,E> *m_way_search_tree_node<K,E>::search(const K &the_key)
+{
+    int i=0;
+    while (i<n&&the_key>element[i].first)i++;
 
+    if (element[i].first==the_key)return this;
+    
+    if (leaf==true)return NULL;
+
+    return child[i].search();
+};
+template<class K,class E>
+void m_way_search_tree_node<K,E>::traverse()
+{
+    int i=0;
+    for (int i = 0; i < n; i++)
+    {
+        if (leaf==false)child[i].traverse();
+        std::cout<<" "<<element[i];
+    }
+    
+    if (leaf==false)child[i].traverse();
+}
+/* ---------------------------- m_way_search_tree --------------------------- */
+template<class K,class E>
+m_way_search_tree<K,E>::m_way_search_tree(int the_t)
+{
+    root=NULL;
+    t=the_t;
+};
+template<class K,class E>
+m_way_search_tree<K,E>::~m_way_search_tree(){delete root;};
+template<class K,class E>
+m_way_search_tree_node<K,E> *m_way_search_tree<K,E>::search(const K &the_key)
+{
+    return(root==NULL)?NULL:root->search(the_key);
+}
+template<class K,class E>
+void m_way_search_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
+{
+    if (root==NULL)
+    {
+        
+    }
+    
+};
+template<class K,class E>
+void m_way_search_tree<K,E>::traverse()
+{
+    return(root==NULL)?NULL:root->traverse();
+};
 #endif

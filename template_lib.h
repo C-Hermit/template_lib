@@ -770,7 +770,7 @@ class Splay_tree:public bs_tree<K,E>
         bool empty()const;
         int length()const;
         std::pair<const K,E> *find(const K &the_key);
-        void insert(const std::pair<const K,E> *the_pair);
+        void insert(const std::pair<const K,E> &the_pair);
         void erase(const K &the_key);
         void Splay(Splay_tree_node<std::pair<const K,E>> *cur_node);
         void L_rotate(Splay_tree_node<std::pair<const K,E>> *parent);
@@ -782,35 +782,32 @@ class Splay_tree:public bs_tree<K,E>
         int Splay_tree_length;
 };
 /* --------------------------- m-way search tree -------------------------- */
-template<class T>
-class m_way_search_tree_node_node;
-template<class T>
+template<class K,class E>
 class m_way_search_tree_node
 {
-    int length;
-    m_way_search_tree_node_node<T> element[3];
-    m_way_search_tree_node<T> *child;
+    public:
+        int t;
+        std::pair<const K,E> *element;
+        m_way_search_tree_node<K,E> **child;
+        int n;
+        bool leaf;
 
-};
-template<class T>
-class m_way_search_tree_node_node
-{
-    T *element;
-    m_way_search_tree_node<T> *child;
+        m_way_search_tree_node<K,E> *search(const K &the_key);
+        void traverse();
 };
 template<class K,class E>
 class m_way_search_tree
 {
     public:
-        m_way_search_tree();
+        m_way_search_tree(int the_t);
         ~m_way_search_tree();
-        bool empty()const;
-        int length()const;
-        void insert(const std::pair<const K,E> *the_pair);
+        m_way_search_tree_node<K,E> *search(const K &the_key);
+        void insert(const std::pair<const K,E> &the_pair);
         void erase(const K &the_key);
+        void traverse();
     private:
-        m_way_search_tree_node<std::pair<const K,E>> *root;
-        int m_way_search_tree_node_length;
+        m_way_search_tree_node<K,E> *root;
+        int t;
 };
 /* ---------------------------- B_tree --------------------------- */
 template<class T>
