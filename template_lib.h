@@ -785,15 +785,18 @@ class Splay_tree:public bs_tree<K,E>
 template<class K,class E>
 class m_way_search_tree_node
 {
-    public:
-        int t;
+        int m;//maxinum degree
         std::pair<const K,E> *element;
         m_way_search_tree_node<K,E> **child;
         int n;
         bool leaf;
-
+    public:
+        m_way_search_tree_node(int the_m,bool the_leaf);
         m_way_search_tree_node<K,E> *search(const K &the_key);
         void traverse();
+        void insert(const std::pair<const K,E> &the_pair);
+        void insert_full(const std::pair<const K,E> &the_pair);
+        void insert_nofull(const std::pair<const K,E> &the_pair);
 };
 template<class K,class E>
 class m_way_search_tree
@@ -807,7 +810,7 @@ class m_way_search_tree
         void traverse();
     private:
         m_way_search_tree_node<K,E> *root;
-        int t;
+        int m;
 };
 /* ---------------------------- B_tree --------------------------- */
 template<class T>

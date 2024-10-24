@@ -3632,6 +3632,15 @@ void Splay_tree<K,E>::in_order(Splay_tree_node<std::pair<const K,E>> *t)
 }
 /* ------------------------- m_way_search_tree_node ------------------------- */
 template<class K,class E>
+m_way_search_tree_node<K,E>::m_way_search_tree_node(int the_m,bool the_leaf)
+{
+    m=the_m;
+    leaf=the_leaf;
+    element=new std::pair<K,E>[m];
+    int n=0; 
+    child=new m_way_search_tree_node<K,E> *[m+1]; 
+}
+template<class K,class E>
 m_way_search_tree_node<K,E> *m_way_search_tree_node<K,E>::search(const K &the_key)
 {
     int i=0;
@@ -3655,12 +3664,73 @@ void m_way_search_tree_node<K,E>::traverse()
     
     if (leaf==false)child[i].traverse();
 }
+template<class K,class E>
+void m_way_search_tree_node<K,E>::insert(const std::pair<const K,E> &the_pair)
+{
+    if (element==NULL)
+    {
+        element=new std::pair<const K,E>[m+1];
+        child=new m_way_search_tree_node<K,E>*[m+1];
+        element[1]=the_pair;
+        child[0]=NULL;
+        n=1;
+        leaf=true;
+    }
+    else
+    {
+        if (n==m)
+        {
+            insertfull(the_pair);
+        }
+        else
+        {
+            insert_nofull(the_pair);   
+        }
+    }
+};
+template<class K,class E>
+void m_way_search_tree_node<K,E>::insert_full(const std::pair<const K,E> &the_pair)
+{
+    int i=1;
+    while (the_pair.first>element[i].first&&i<n)i++;
+    if (the_pair.first==element[i].first)
+    {
+        element[i].second=the_pair.second;
+    }
+    else
+    {
+        leaf=false;
+        child[i]=new m_way_search_tree_node<K,E>(m,false); 
+        child[i]->element[1]=new std::pair<const K,E>(the_pair);
+        child[i]->n++;
+    }
+};
+template<class K,class E>
+void m_way_search_tree_node<K,E>::insert_nofull(const std::pair<const K,E> &the_pair)
+{
+    int i=1;
+    while (the_pair.first>element[i].first&&i<n)i++;
+    if (the_pair.first==element[i].first)
+    {
+        element[i].second=the_pair.second;
+    }
+    else
+    {
+        for (int k = n; k <=i; k--)
+        {
+            element[k+1]=element[k];
+            child[k+1]=child[k];
+        }
+        element[i]=the_pair;
+        child[i]=NULL;
+    }
+};
 /* ---------------------------- m_way_search_tree --------------------------- */
 template<class K,class E>
-m_way_search_tree<K,E>::m_way_search_tree(int the_t)
+m_way_search_tree<K,E>::m_way_search_tree(int the_m)
 {
     root=NULL;
-    t=the_t;
+    m=the_m;
 };
 template<class K,class E>
 m_way_search_tree<K,E>::~m_way_search_tree(){delete root;};
@@ -3669,15 +3739,6 @@ m_way_search_tree_node<K,E> *m_way_search_tree<K,E>::search(const K &the_key)
 {
     return(root==NULL)?NULL:root->search(the_key);
 }
-template<class K,class E>
-void m_way_search_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
-{
-    if (root==NULL)
-    {
-        
-    }
-    
-};
 template<class K,class E>
 void m_way_search_tree<K,E>::traverse()
 {
