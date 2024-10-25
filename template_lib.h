@@ -792,11 +792,17 @@ class m_way_search_tree_node
         bool leaf;
     public:
         m_way_search_tree_node(int the_m,bool the_leaf);
+        ~m_way_search_tree_node();
         m_way_search_tree_node<K,E> *search(const K &the_key);
         void traverse();
-        void insert(const std::pair<const K,E> &the_pair);
+        int find_key(const K &the_key);
         void insert_full(const std::pair<const K,E> &the_pair);
         void insert_nofull(const std::pair<const K,E> &the_pair);
+        void erase(const K &the_key);
+        void erase_from_leaf(const int &the_idx);
+        void erase_from_noleaf(const int &the_idx);
+        void get_pred(const int &the_idx);
+        void get_succ(const int &the_idx);
 };
 template<class K,class E>
 class m_way_search_tree

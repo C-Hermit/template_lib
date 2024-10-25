@@ -3641,16 +3641,21 @@ m_way_search_tree_node<K,E>::m_way_search_tree_node(int the_m,bool the_leaf)
     child=new m_way_search_tree_node<K,E> *[m+1]; 
 }
 template<class K,class E>
+m_way_search_tree_node<K,E>::~m_way_search_tree_node()
+{
+    delete []element;
+    delete []child;
+};
+template<class K,class E>
 m_way_search_tree_node<K,E> *m_way_search_tree_node<K,E>::search(const K &the_key)
 {
-    int i=0;
-    while (i<n&&the_key>element[i].first)i++;
+    int idx=find_key(the_key);
 
-    if (element[i].first==the_key)return this;
+    if (element[idx].first==the_key)return this;
     
     if (leaf==true)return NULL;
 
-    return child[i].search();
+    return child[idx].search();
 };
 template<class K,class E>
 void m_way_search_tree_node<K,E>::traverse()
@@ -3665,65 +3670,113 @@ void m_way_search_tree_node<K,E>::traverse()
     if (leaf==false)child[i].traverse();
 }
 template<class K,class E>
-void m_way_search_tree_node<K,E>::insert(const std::pair<const K,E> &the_pair)
+int m_way_search_tree_node<K,E>::find_key(const K &the_key)
 {
-    if (element==NULL)
-    {
-        element=new std::pair<const K,E>[m+1];
-        child=new m_way_search_tree_node<K,E>*[m+1];
-        element[1]=the_pair;
-        child[0]=NULL;
-        n=1;
-        leaf=true;
-    }
-    else
-    {
-        if (n==m)
-        {
-            insertfull(the_pair);
-        }
-        else
-        {
-            insert_nofull(the_pair);   
-        }
-    }
+    int idx=0;
+    while (the_key<element[idx].first&&idx<n)idx++;
+    return idx;
 };
 template<class K,class E>
 void m_way_search_tree_node<K,E>::insert_full(const std::pair<const K,E> &the_pair)
 {
-    int i=1;
-    while (the_pair.first>element[i].first&&i<n)i++;
-    if (the_pair.first==element[i].first)
+    int idx=find_key(the_pair.first);
+    if (the_pair.first==element[idx].first)
     {
-        element[i].second=the_pair.second;
+        element[idx].second=the_pair.second;
     }
     else
     {
-        leaf=false;
-        child[i]=new m_way_search_tree_node<K,E>(m,false); 
-        child[i]->element[1]=new std::pair<const K,E>(the_pair);
-        child[i]->n++;
+        if (leaf==true)
+        {
+            leaf=false;
+        }
+        if (child[idx]==NULL)
+        {
+            child[idx]=new m_way_search_tree_node<K,E>(m,false); 
+            child[idx]->element[0]=the_pair;
+            child[idx]->n++;
+        }
+        else if (child[idx]!=NULL)
+        {
+            child[idx]->insert_nofull(the_pair);
+        }
     }
 };
 template<class K,class E>
 void m_way_search_tree_node<K,E>::insert_nofull(const std::pair<const K,E> &the_pair)
 {
-    int i=1;
-    while (the_pair.first>element[i].first&&i<n)i++;
-    if (the_pair.first==element[i].first)
+    int idx=find_key(the_pair.first);
+    if (the_pair.first==element[idx].first)
     {
-        element[i].second=the_pair.second;
+        element[idx].second=the_pair.second;
     }
     else
     {
-        for (int k = n; k <=i; k--)
+        for (int k = n; k <=idx; k--)
         {
             element[k+1]=element[k];
             child[k+1]=child[k];
         }
-        element[i]=the_pair;
-        child[i]=NULL;
+        element[idx]=the_pair;
+        child[idx]=NULL;
     }
+};
+template<class K,class E>
+void m_way_search_tree_node<K,E>::erase(const K &the_key)
+{
+    int idx=find_key(the_key);
+    if (the_key=element[idx].first&&idx<n)
+    {
+        if (leaf)
+        {
+            erase_from_leaf(idx);//erase from leaf
+        }
+        else
+        {
+            erase_from_noleaf(idx);//erase from noleaf
+        }
+    }
+    else
+    {
+        if (leaf)
+        {
+            return;
+        }
+        else
+        {
+            child[n+1]->erase(the_key);
+        }
+        
+    }
+};
+template<class K,class E>
+void m_way_search_tree_node<K,E>::erase_from_leaf(const int &the_idx)
+{
+    for (int i = the_idx; i <n; i++)
+    {
+        element[i]=element[i+1];
+        child[i]=child[i+1];
+    }
+    n--;
+    return;
+};
+template<class K,class E>
+void m_way_search_tree_node<K,E>::erase_from_noleaf(const int &the_idx)
+{
+    int k=element[the_idx]->first;
+    if (child[the_idx]->n!=0)
+    {
+        std::pair<const K,E> pred=get_pred(the_idx);
+        element[the_idx]=pred;
+        child[the_idx]->erase(pred);
+    }
+    else if (child[the_idx+1]->n!=0)
+    {
+        std::pair<const K,E> succ=get_succ(the_idx);
+        element[the_idx]=succ;
+        child[the_idx+1]->erase(succ);       
+    }
+    return;
 };
 /* ---------------------------- m_way_search_tree --------------------------- */
 template<class K,class E>
@@ -3743,5 +3796,40 @@ template<class K,class E>
 void m_way_search_tree<K,E>::traverse()
 {
     return(root==NULL)?NULL:root->traverse();
+};
+template<class K,class E>
+void m_way_search_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
+{
+    if (root==NULL)
+    {
+        root=new m_way_search_tree_node(m,true);
+        root->element[0]=the_pair;
+        root.n=1;
+    }
+    else
+    {
+        if (root->n=m)
+        {
+            root->insert_full(the_pair);
+        }
+        else
+        {
+            root->insert_nofull(the_pair);
+        }
+        
+    }
+};
+template<class K,class E>
+void m_way_search_tree<K,E>::erase(const K &the_key)
+{
+    if (root==NULL)
+    {
+        throw std::underflow_error("the root is empty");
+    }
+    root->erase(the_key);
+    if (root->n==0)
+    {
+        root=NULL;   
+    }
 };
 #endif
