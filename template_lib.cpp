@@ -3778,6 +3778,26 @@ void m_way_search_tree_node<K,E>::erase_from_noleaf(const int &the_idx)
     }
     return;
 };
+template<class K,class E>
+std::pair<const K,E> m_way_search_tree_node<K,E>::get_pred(const int &the_idx)
+{
+    m_way_search_tree_node<K,E> *cur=child[the_idx];
+    while (!cur->leaf)
+    {
+        cur=cur->child[cur->n];
+    }
+    return cur->element[cur->n-1];
+};
+template<class K,class E>
+std::pair<const K,E> m_way_search_tree_node<K,E>::get_succ(const int &the_idx)
+{
+    m_way_search_tree_node<K,E> *cur=child[the_idx+1];
+    while (!cur->leaf)
+    {
+        cur=cur->child[0];
+    }
+    return cur->element[0];
+};
 /* ---------------------------- m_way_search_tree --------------------------- */
 template<class K,class E>
 m_way_search_tree<K,E>::m_way_search_tree(int the_m)

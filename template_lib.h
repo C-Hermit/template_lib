@@ -801,8 +801,8 @@ class m_way_search_tree_node
         void erase(const K &the_key);
         void erase_from_leaf(const int &the_idx);
         void erase_from_noleaf(const int &the_idx);
-        void get_pred(const int &the_idx);
-        void get_succ(const int &the_idx);
+        std::pair<const K,E> get_pred(const int &the_idx);
+        std::pair<const K,E> get_succ(const int &the_idx);
 };
 template<class K,class E>
 class m_way_search_tree
