@@ -3852,4 +3852,5 @@ void m_way_search_tree<K,E>::erase(const K &the_key)
         root=NULL;   
     }
 };
+/* ------------------------------- B_tree_node ------------------------------ */
 #endif

@@ -783,7 +783,30 @@ class Splay_tree:public bs_tree<K,E>
 };
 /* --------------------------- m-way search tree -------------------------- */
 template<class K,class E>
-class m_way_search_tree_node
+class mws_tree_node
+{
+    public:
+        virtual mws_tree_node<K,E> *search(const K &the_key)=0;
+        virtual void insert_full(const std::pair<const K,E> &the_pair)=0;
+        virtual void insert_nofull(const std::pair<const K,E> &the_pair)=0;
+        virtual void erase(const K &the_key)=0;
+        virtual void erase_from_leaf(const K &the_key)=0;
+        virtual void erase_from_noleaf(const K &the_kay)=0;
+        virtual std::pair<const K,E> get_pred(const int &the_idx)=0;
+        virtual std::pair<const K,E> get_succ(const int &the_idx)=0;
+        virtual void traverse()=0;
+};
+template<class K,class E>
+class mws_tree
+{
+    public:
+        virtual mws_tree_node<K,E> *search(const K &the_key)=0;
+        virtual void insert(const std::pair<const K,E> &the_pair)=0;
+        virtual void erase(const K &the_key)=0;
+        virtual void traverse()=0;
+};
+template<class K,class E>
+class m_way_search_tree_node:public mws_tree_node<K,E>
 {
         int m;//maxinum degree
         std::pair<const K,E> *element;
@@ -805,7 +828,7 @@ class m_way_search_tree_node
         std::pair<const K,E> get_succ(const int &the_idx);
 };
 template<class K,class E>
-class m_way_search_tree
+class m_way_search_tree :public mws_tree<K,E>
 {
     public:
         m_way_search_tree(int the_t);
@@ -819,25 +842,26 @@ class m_way_search_tree
         int m;
 };
 /* ---------------------------- B_tree --------------------------- */
-template<class T>
-class B_tree_node
+template<class K,class E>
+class B_tree_node:public mws_tree_node<K,E>
 {
+    int m;
+    std::pair<const K,E> *element;
+    B_tree_node<K,E> **child;
+    int n;
+    bool leaf;
     public:
-        T element;
-        B_tree_node*left_node;
-        B_tree_node *right_node;
-        bool leaf;
-    B_tree_node(){left_node=right_node=NULL;};
-    B_tree_node(const T &the_element):element(the_element)
-    {
-        left_node=right_node=NULL;
-    };
-    B_tree_node(const T &the_element,B_tree_node *the_left_node,B_tree_node *the_right_node)
-    :element(the_element)
-    {
-        left_node=the_left_node;
-        the_right_node=the_right_node;
-    }
+        B_tree_node(int the_m,bool the_leaf);
+        ~B_tree_node();
+        B_tree_node<K,E> *search(const K &the_key);
+        void traverse();
+        int find_key(const K &the_key)const;
+        void spilt_child(const std::pair<const K,E> &the_pair);
+        void insert_full(const std::pair<const K,E> &the_pair);
+        void erase_from_leaf(const int &the_idx);
+        void erase_from_noleaf(const int &the_idx);
+        std::pair<const K,E> get_pred(const int &the_idx);
+        std::pair<const K,E> get_succ(const int &the_idx);
 };
 
 #include"template_lib.cpp"
