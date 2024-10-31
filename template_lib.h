@@ -863,6 +863,19 @@ class B_tree_node:public mws_tree_node<K,E>
         std::pair<const K,E> get_pred(const int &the_idx);
         std::pair<const K,E> get_succ(const int &the_idx);
 };
-
+template<class K,class E>
+class B_tree:public mws_tree<K,E>
+{
+    public:
+        B_tree(int the_m);
+        ~B_tree();
+        B_tree_node<K,E> *search(const K &the_key);
+        void traverse();
+        void insert(const std::pair<const K,E> *the_pair);
+        void erase(const std::pair<const K,E> *the_pair);
+    protected:
+        int m;
+        B_tree_node<K,E> *root;
+};
 #include"template_lib.cpp"
 #endif
