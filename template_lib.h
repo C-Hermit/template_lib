@@ -856,8 +856,8 @@ class B_tree_node:public mws_tree_node<K,E>
         B_tree_node<K,E> *search(const K &the_key);
         void traverse();
         int find_key(const K &the_key)const;
-        void spilt_child(const std::pair<const K,E> &the_pair);
-        void insert_full(const std::pair<const K,E> &the_pair);
+        void spilt_child(int idx,B_tree_node<K,E> *the_child);
+        void insert_nofull(const std::pair<const K,E> &the_pair);
         void erase_from_leaf(const int &the_idx);
         void erase_from_noleaf(const int &the_idx);
         std::pair<const K,E> get_pred(const int &the_idx);

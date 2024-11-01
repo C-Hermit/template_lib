@@ -3815,7 +3815,10 @@ m_way_search_tree_node<K,E> *m_way_search_tree<K,E>::search(const K &the_key)
 template<class K,class E>
 void m_way_search_tree<K,E>::traverse()
 {
-    return(root==NULL)?NULL:root->traverse();
+    if (root!=NULL)
+    {
+        root->traverse();
+    }
 };
 template<class K,class E>
 void m_way_search_tree<K,E>::insert(const std::pair<const K,E> &the_pair)
@@ -3853,4 +3856,97 @@ void m_way_search_tree<K,E>::erase(const K &the_key)
     }
 };
 /* ------------------------------- B_tree_node ------------------------------ */
+template<class K,class E>
+B_tree_node<K,E>::B_tree_node(int the_m,bool the_leaf)
+{
+    m=the_m;
+    element=new std::pair<const K,E>[m];
+    child=new B_tree_node<K,E>* [m+1];
+    n=0;
+    leaf=the_leaf;
+}
+template<class K,class E>
+B_tree_node<K,E>::~B_tree_node()
+{
+    delete[] element;
+    delete[] child;
+};
+template<class K,class E>
+B_tree_node<K,E> *B_tree_node<K,E>::search(const K &the_key)
+{
+       
+};
+/* --------------------------------- B_tree --------------------------------- */
+template<class K,class E>
+B_tree<K,E>::B_tree(int the_m)
+{
+    m=the_m;
+    root=NULL;
+};
+template<class K,class E>
+B_tree<K,E>::~B_tree()
+{
+    delete root;
+};
+template<class K,class E>
+B_tree_node<K,E> *B_tree<K,E>::search(const K &the_key){return (root==NULL)?NULL:root->search(the_key);};
+template<class K,class E>
+void B_tree<K,E>::traverse()
+{
+    if (root!=NULL)
+    {
+        root->traverse();   
+    }
+};
+template<class K,class E>
+void B_tree<K,E>::insert(const std::pair<const K,E> *the_pair)
+{
+    if (root==NULL)
+    {
+        root=new B_tree_node<K,E>(m,true);
+        root->element[0]=the_pair;
+        root->child[0]=NULL;
+        root->n=1;
+    }
+    else
+    {
+        if (root->n==m)//spilt child
+        {
+            B_tree_node<K,E> *s=new B_tree_node<K,E>(m,true);
+            s->child[0]=root;
+            s->spilt_child(0,root);
+            int i=0;
+            if (s->element[i].first<the_pair->first)
+            {
+                i++;
+            }
+            s->child[i]->insert_nofull(the_pair);
+        }
+        else//add node
+        {
+            root->insert_nofull(the_pair);
+        }
+    }
+    
+}
+template<class K,class E>
+void B_tree<K,E>::erase(const std::pair<const K,E> *the_pair)
+{
+    if (root==NULL)
+    {
+        throw std::runtime_error("the B_tree is empty");
+    }
+    root->erase(the_pair);
+    if (root->n==0)
+    {
+        B_tree_node<K,E> *tmp=root;
+        if (root->leaf)
+        {
+            root=NULL;
+        }
+        else root=root->child[0];
+        delete tmp;
+    }
+    return;
+}
 #endif
