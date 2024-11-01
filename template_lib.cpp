@@ -3874,7 +3874,37 @@ B_tree_node<K,E>::~B_tree_node()
 template<class K,class E>
 B_tree_node<K,E> *B_tree_node<K,E>::search(const K &the_key)
 {
-       
+    int i=0;
+    while (element[i].first<the_key&&i<n)i++;
+    if (element[i].first==the_key)
+    {
+        return this;
+    }
+    if (leaf)
+    {
+        return NULL;
+    }
+    return child[i]->search(the_key);
+    
+};
+template<class K,class E>
+void B_tree_node<K,E>::traverse()
+{
+    int i=0;
+    for (; i < n; i++)
+    {
+        if (child[i]->leaf==false)
+        {
+            child[i]->traverse();
+        }
+        std::cout<<element<<' ';
+    }
+    if (child[i]->leaf==false)
+    {
+        child[i]->traverse();
+    }
+    
+    
 };
 /* --------------------------------- B_tree --------------------------------- */
 template<class K,class E>
