@@ -3903,8 +3903,76 @@ void B_tree_node<K,E>::traverse()
     {
         child[i]->traverse();
     }
+};
+template<class K,class E>
+int B_tree_node<K,E>::find_key(const K &the_key)const
+{
+    int idx=0;
+    while(element[idx].first<the_key&&idx<n)idx++;
+    return idx;
+};
+template<class K,class E>
+void B_tree_node<K,E>::spilt_child(int the_idx,B_tree_node<K,E> *the_child)
+{
+    B_tree_node<K,E> *other_child=new B_tree_node(the_child->m,the_child->leaf);
+    int t=m/2;
+    other_child->n=m-t;
+
+    for (int i = 0; i < m-t; i++)
+    {
+        other_child->element[i]=the_child->element[t+i];
+    }
+    if (!the_child->leaf)
+    {
+        for (int i = 0; i < m-t; i++)
+        {
+            other_child->child[i]=other_child->child[t+i];
+        }
+    }
+    the_child->n=t-1;
+
+    for (int i = n; i >= the_idx; i--)
+    {
+        child[i+1]=child[i];
+    }
+    child[the_idx]=other_child;
+
+    for (int i = n-1; i >=the_idx ; i--)
+    {
+        element[i+1]=element[i];
+    }
     
-    
+    element[the_idx]=the_child->element[t-1];
+    n=n+1;
+};
+template<class K,class E>
+void B_tree_node<K,E>::insert_nofull(const std::pair<const K,E> &the_pair)
+{
+    int i=n-1;
+    if (leaf==true)
+    {
+        while (i>=0&&element[i].first>the_pair.first)
+        {
+            element[i+1]=element[i];
+            i--;
+        }
+        element[i+1]=the_pair;
+        n=n+1;
+    }
+    else
+    {
+        while (i>=0&&element[i].first>the_pair.first)i--;
+        if (child[i+1]->n=m)
+        {
+            spilt_child(i+1,child[i+1]);
+            if (element[i+1].first<the_pair.first)
+            {
+                i++;
+            }
+            
+        }
+        child[i+1]->insert_nofull(the_pair);
+    }
 };
 /* --------------------------------- B_tree --------------------------------- */
 template<class K,class E>
